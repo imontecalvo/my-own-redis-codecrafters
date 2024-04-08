@@ -27,7 +27,8 @@ public class Main {
           byte[] r = new byte[10];
           input.read(r);
 
-          output.writeUTF("+PONG\r\n");
+          String response = "+PONG\r\n";
+          output.write(response.getBytes());
 
       } catch (IOException e) {
           System.out.println("IOException: " + e.getMessage());
