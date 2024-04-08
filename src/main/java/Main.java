@@ -17,31 +17,15 @@ public class Main {
           // ensures that we don't run into 'Address already in use' errors
           serverSocket.setReuseAddress(true);
           // Wait for connection from client.
-          clientSocket = serverSocket.accept();
 
-          BufferedReader br = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-          OutputStream output = clientSocket.getOutputStream();
+          while(true){
+              clientSocket = serverSocket.accept();
 
-          while (!clientSocket.isClosed()){
-              char[] r = new char[100];
-              if (br.read(r) > 0){
-                  String response = "+PONG\r\n";
-                  output.write(response.getBytes());
-              }
+              Thread thread = new Thread(new ClientHandler(clientSocket));
+              thread.start();
           }
-
       } catch (IOException e) {
           System.out.println("IOException: " + e.getMessage());
-      } finally {
-          try {
-              if (clientSocket != null) {
-                  clientSocket.close();
-              }
-          } catch (IOException e) {
-              System.out.println("IOException: " + e.getMessage());
-          }
       }
-
-
   }
 }
