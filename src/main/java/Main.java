@@ -1,6 +1,9 @@
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Arrays;
 
 public class Main {
   public static void main(String[] args){
@@ -17,6 +20,15 @@ public class Main {
           serverSocket.setReuseAddress(true);
           // Wait for connection from client.
           clientSocket = serverSocket.accept();
+
+          DataInputStream input = new DataInputStream(clientSocket.getInputStream());
+          DataOutputStream output = new DataOutputStream(clientSocket.getOutputStream());
+
+          byte[] r = new byte[10];
+          input.read(r);
+
+          output.writeUTF("+PONG\r\n");
+
       } catch (IOException e) {
           System.out.println("IOException: " + e.getMessage());
       } finally {
@@ -28,5 +40,7 @@ public class Main {
               System.out.println("IOException: " + e.getMessage());
           }
       }
+
+
   }
 }
