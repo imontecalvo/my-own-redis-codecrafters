@@ -19,10 +19,10 @@ public class ClientHandler implements Runnable{
             OutputStream output = socket.getOutputStream();
 
             while (!socket.isClosed()){
-                char[] r = new char[100];
+                char[] r = new char[1024];
                 if (br.read(r) > 0){
-                    String response = "+PONG\r\n";
-                    output.write(response.getBytes());
+                    Request req = new Request(r);
+                    output.write(req.getResponse());
                 }
             }
         } catch (IOException e) {
