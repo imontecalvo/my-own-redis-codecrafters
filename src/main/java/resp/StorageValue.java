@@ -22,6 +22,6 @@ public class StorageValue {
 
     public Boolean isExpired(){
         if (ttl.isEmpty()) return false;
-        return createdAt.getTime() + ttl.get() >= System.currentTimeMillis();
+        return createdAt.getTime() + ttl.get() <= System.currentTimeMillis();
     }
 }
