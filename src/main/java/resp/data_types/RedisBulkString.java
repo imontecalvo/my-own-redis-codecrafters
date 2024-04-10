@@ -11,6 +11,10 @@ public class RedisBulkString implements DataType {
         this.content = content;
     }
 
+    public static RedisBulkString nullString(){
+        return new RedisBulkString(null);
+    }
+
     public static RedisBulkString fromBytes(BufferedReader reader) throws IOException {
         char[] r = new char[1];
         char[] crlf = new char[2];

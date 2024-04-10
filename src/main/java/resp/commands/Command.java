@@ -1,9 +1,7 @@
 package resp.commands;
 
-import resp.data_types.DataType;
-
-import java.util.HashMap;
+import resp.Storage;
 
 public interface Command {
-    public byte[] execute(HashMap<String, DataType> storage);
+    public byte[] execute(Storage storage);
 }

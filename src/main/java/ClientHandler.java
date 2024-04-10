@@ -1,8 +1,8 @@
 import resp.CommandFactory;
 import resp.Request;
+import resp.Storage;
+import resp.StorageValue;
 import resp.commands.Command;
-import resp.data_types.DataType;
-import resp.Parser;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -21,7 +21,7 @@ public class ClientHandler implements Runnable{
 
     @Override
     public void run() {
-        HashMap<String,DataType> storage = new HashMap<>();
+        Storage storage = new Storage();
 
         try{
             BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream()));

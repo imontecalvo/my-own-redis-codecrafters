@@ -1,13 +1,11 @@
 package resp.commands;
 
-import resp.data_types.DataType;
+import resp.Storage;
 import resp.data_types.RedisString;
-
-import java.util.HashMap;
 
 public class Ping implements Command{
     @Override
-    public byte[] execute(HashMap<String, DataType> storage) {
+    public byte[] execute(Storage storage) {
         RedisString response = new RedisString("PONG");
         return response.toBytes();
     }
