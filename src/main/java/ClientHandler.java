@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.util.HashMap;
 
 public class ClientHandler implements Runnable{
 
@@ -20,6 +21,8 @@ public class ClientHandler implements Runnable{
 
     @Override
     public void run() {
+        HashMap<String,DataType> storage = new HashMap<>();
+
         try{
             BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             OutputStream output = socket.getOutputStream();
@@ -28,12 +31,8 @@ public class ClientHandler implements Runnable{
                 Request request = Request.fromBytes(br);
                 if (request!=null){
                     Command command = CommandFactory.createCommand(request);
-                    output.write(command.execute());
+                    output.write(command.execute(storage));
                 }
-//                DataType recv = Parser.fromBytes(br);
-//                if (recv != null) {
-//                    recv.print();
-//                }
             }
         } catch (IOException e) {
             System.out.println("IOException: " + e.getMessage());

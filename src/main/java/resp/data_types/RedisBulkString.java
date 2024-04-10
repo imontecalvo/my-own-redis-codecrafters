@@ -33,6 +33,11 @@ public class RedisBulkString implements DataType {
 
     @Override
     public byte[] toBytes() {
+        if (content==null){
+            return "$-1\r\n".getBytes();
+        }else if (content.isEmpty()){
+            return "$0\r\n".getBytes();
+        }
         return String.format("$%d\r\n%s\r\n", this.content.length(), this.content).getBytes();
     }
 
