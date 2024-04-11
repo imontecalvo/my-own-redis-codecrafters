@@ -10,6 +10,18 @@ import java.io.IOException;
 
 public class Parser {
     public static DataType fromBytes(BufferedReader reader) throws IOException {
+        DataType data = parse(reader);
+        if (data!=null){
+            if (!(data instanceof RedisString)){
+                char[] crlf = new char[2];
+                reader.read(crlf);
+            }
+            return data;
+        }
+        return null;
+    }
+
+    public static DataType parse(BufferedReader reader) throws IOException {
         char[] r = new char[1];
 
         if (reader.read(r) > 0) {

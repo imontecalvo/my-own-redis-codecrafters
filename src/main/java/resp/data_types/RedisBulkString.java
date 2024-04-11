@@ -22,6 +22,7 @@ public class RedisBulkString implements DataType {
         StringBuilder string = new StringBuilder();
 
         if (reader.read(r) > 0) {
+            if (r[0]=='-') return RedisBulkString.nullString();
             int length = Integer.parseUnsignedInt(String.copyValueOf(r));
 
             if (reader.read(crlf) > 0 && crlf[0] == '\r' && crlf[1] == '\n') {
@@ -45,9 +46,12 @@ public class RedisBulkString implements DataType {
         return String.format("$%d\r\n%s\r\n", this.content.length(), this.content).getBytes();
     }
 
-    @Override
     public void print() {
-        System.out.println("Contenido: "+this.content);
+        if (content!=null){
+            System.out.println("Contenido: "+this.content);
+        }else{
+            System.out.println("Contenido: NullString");
+        }
     }
 
     public String getContent() {

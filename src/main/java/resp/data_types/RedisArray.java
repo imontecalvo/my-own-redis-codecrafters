@@ -18,9 +18,9 @@ public class RedisArray implements DataType{
         int length = Integer.parseInt(reader.readLine());
         DataType[] content = new DataType[length];
         for (int i=0; i<length;i++){
-            content[i] = Parser.fromBytes(reader);
+            content[i] = Parser.parse(reader);
             char[] crlf = new char[2];
-            reader.read(crlf);
+            if (i<length-1) reader.read(crlf);
         }
 
         return new RedisArray(content);
