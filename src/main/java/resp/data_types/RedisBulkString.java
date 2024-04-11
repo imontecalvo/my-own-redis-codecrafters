@@ -17,23 +17,27 @@ public class RedisBulkString implements DataType {
 
     public static RedisBulkString fromBytes(BufferedReader reader) throws IOException {
         char[] r = new char[1];
-        char[] crlf = new char[2];
-
         StringBuilder string = new StringBuilder();
 
-        if (reader.read(r) > 0) {
-            if (r[0]=='-') return RedisBulkString.nullString();
-            int length = Integer.parseUnsignedInt(String.copyValueOf(r));
+        int length = readStringLength(reader);
+        if (length < 0) return RedisBulkString.nullString();
 
-            if (reader.read(crlf) > 0 && crlf[0] == '\r' && crlf[1] == '\n') {
-                for (int i=0; i<length;i++){
-                    reader.read(r);
-                    string.append(r[0]);
-                }
-                return new RedisBulkString(string.toString());
-            }
+        for (int i=0; i<length;i++){
+            reader.read(r);
+            string.append(r[0]);
         }
-        throw new IOException();
+        return new RedisBulkString(string.toString());
+    }
+
+    private static Integer readStringLength(BufferedReader reader) throws IOException {
+        StringBuilder length = new StringBuilder();
+        char[] r = new char[1];
+
+        while (reader.read(r) > 0 && r[0]!='\r'){
+            length.append(r[0]);
+        }
+        reader.read(r);
+        return Integer.parseInt(length.toString());
     }
 
     @Override
