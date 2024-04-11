@@ -12,6 +12,7 @@ public class CommandFactory {
             case "ECHO" -> new Echo(request);
             case "SET" -> new Set(request);
             case "GET" -> new Get(request);
+            case "INFO" -> new Info(request);
             default -> null;
         };
     }
