@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.util.Arrays;
 import java.util.HashMap;
 
 public class ClientHandler implements Runnable{
@@ -35,14 +36,14 @@ public class ClientHandler implements Runnable{
                 }
             }
         } catch (IOException e) {
-            System.out.println("IOException: " + e.getMessage());
+            System.out.println("IOException: " + e.getMessage() + Arrays.toString(e.getStackTrace()));
         }finally {
             try {
                 if (socket != null) {
                     socket.close();
                 }
             } catch (IOException e) {
-                System.out.println("IOException: " + e.getMessage());
+                System.out.println("IOException: " + e.getMessage() + Arrays.toString(e.getStackTrace()));
             }
         }
     }
