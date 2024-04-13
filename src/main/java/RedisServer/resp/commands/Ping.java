@@ -1,7 +1,7 @@
-package resp.commands;
+package RedisServer.resp.commands;
 
-import resp.Storage;
-import resp.data_types.RedisString;
+import RedisServer.resp.Storage;
+import RedisServer.resp.data_types.RedisString;
 
 public class Ping implements Command{
     @Override

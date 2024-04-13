@@ -1,7 +1,7 @@
-package resp;
+package RedisServer.resp;
 
-import resp.data_types.DataType;
-import resp.data_types.RedisBulkString;
+import RedisServer.resp.data_types.DataType;
+import RedisServer.resp.data_types.RedisBulkString;
 
 import java.util.HashMap;
 import java.util.Optional;

@@ -1,10 +1,10 @@
-package resp.commands;
+package RedisServer.resp.commands;
 
-import resp.Request;
-import resp.Storage;
-import resp.data_types.DataType;
-import resp.data_types.RedisArray;
-import resp.data_types.RedisBulkString;
+import RedisServer.Settings;
+import RedisServer.resp.Request;
+import RedisServer.resp.Storage;
+import RedisServer.resp.data_types.DataType;
+import RedisServer.resp.data_types.RedisBulkString;
 
 public class Info implements Command {
     public Info(Request request) {
@@ -16,7 +16,8 @@ public class Info implements Command {
 
     @Override
     public byte[] execute(Storage storage) {
-        RedisBulkString response = new RedisBulkString("role:master");
+        String role = Settings.getRole();
+        RedisBulkString response = new RedisBulkString("role:"+role);
         return response.toBytes();
     }
 }

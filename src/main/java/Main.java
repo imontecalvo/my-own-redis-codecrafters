@@ -1,3 +1,5 @@
+import RedisServer.Settings;
+
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -5,10 +7,8 @@ import java.util.Arrays;
 
 public class Main {
     public static void main(String[] args) {
-        int port = 6379;
-        if (args.length == 2 && args[0].equals("--port")){
-            port = Integer.parseInt(args[1]);
-        }
+        Settings.set(ArgsParser.parse(args));
+        int port = Settings.getPort();
 
         // You can use print statements as follows for debugging, they'll be visible when running tests.
         {

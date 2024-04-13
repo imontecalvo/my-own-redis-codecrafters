@@ -1,9 +1,9 @@
-package resp.commands;
+package RedisServer.resp.commands;
 
-import resp.Request;
-import resp.Storage;
-import resp.data_types.DataType;
-import resp.data_types.RedisBulkString;
+import RedisServer.resp.Request;
+import RedisServer.resp.Storage;
+import RedisServer.resp.data_types.DataType;
+import RedisServer.resp.data_types.RedisBulkString;
 
 public class Get implements Command{
     private final String key;

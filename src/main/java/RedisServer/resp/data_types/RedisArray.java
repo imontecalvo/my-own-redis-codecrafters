@@ -1,10 +1,10 @@
-package resp.data_types;
+package RedisServer.resp.data_types;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.Arrays;
 
-import resp.Parser;
+import RedisServer.resp.Parser;
 
 public class RedisArray implements DataType{
 

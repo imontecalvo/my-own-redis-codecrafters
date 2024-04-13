@@ -1,13 +1,11 @@
-package resp;
+package RedisServer.resp;
 
-import resp.data_types.DataType;
-import resp.data_types.RedisArray;
-import resp.data_types.RedisBulkString;
-import resp.data_types.RedisString;
+import RedisServer.resp.data_types.DataType;
+import RedisServer.resp.data_types.RedisArray;
+import RedisServer.resp.data_types.RedisBulkString;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.List;
 
 public class Request {
     private String command;

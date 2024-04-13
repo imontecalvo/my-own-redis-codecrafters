@@ -1,4 +1,4 @@
-package resp.data_types;
+package RedisServer.resp.data_types;
 
 public interface DataType {
 

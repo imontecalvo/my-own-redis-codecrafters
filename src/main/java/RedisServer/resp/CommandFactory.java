@@ -1,8 +1,6 @@
-package resp;
+package RedisServer.resp;
 
-import resp.commands.*;
-import resp.data_types.RedisBulkString;
-import resp.data_types.RedisString;
+import RedisServer.resp.commands.*;
 
 public class CommandFactory {
     public static Command createCommand(Request request){
