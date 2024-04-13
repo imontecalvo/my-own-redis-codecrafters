@@ -9,7 +9,7 @@ import RedisServer.resp.data_types.RedisBulkString;
 public class Info implements Command {
     public Info(Request request) {
         DataType[] args = request.getArgs();
-        if (args.length != 1 || !((RedisBulkString) args[0]).getContent().equalsIgnoreCase("REPLICATION")){
+        if (args.length != 1 || !((RedisBulkString) args[0]).getContent().equalsIgnoreCase("REPLICATION")) {
             System.out.println("ERROR INFO COMMAND");
         }
     }
@@ -17,7 +17,10 @@ public class Info implements Command {
     @Override
     public byte[] execute(Storage storage) {
         String role = Settings.getRole();
-        RedisBulkString response = new RedisBulkString("role:"+role);
+        String masterReplId = Settings.getMasterReplicationId();
+        int masterReplOffset = Settings.getMasterReplicationOffset();
+        String rawResponse = String.format("role:%s\r\nmaster_replid:%s\r\nmaster_repl_offset:%d", role, masterReplId, masterReplOffset);
+        RedisBulkString response = new RedisBulkString(rawResponse);
         return response.toBytes();
     }
 }

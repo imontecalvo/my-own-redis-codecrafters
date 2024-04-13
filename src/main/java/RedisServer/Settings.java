@@ -4,6 +4,9 @@ import java.util.HashMap;
 
 public abstract class Settings {
     private static final int DEF_PORT = 6379;
+
+    private static final String MASTER_REPLID = "8371b4fb1155b71f4a04d3e1bc3e18c4a990aeeb";
+    private static final int MASTER_REPL_OFFSET = 0;
     private static HashMap<String, String[]> settings;
 
     public static void set(HashMap<String, String[]> settings) {
@@ -24,5 +27,13 @@ public abstract class Settings {
     public static String getRole(){
         if (settings!=null) return settings.containsKey("--replicaof") ? "slave" : "master";
         return null;
+    }
+
+    public static String getMasterReplicationId(){
+        return MASTER_REPLID;
+    }
+
+    public static int getMasterReplicationOffset(){
+        return MASTER_REPL_OFFSET;
     }
 }
