@@ -7,13 +7,24 @@ import java.util.HashMap;
 import java.util.Optional;
 
 public class Storage {
+    private static Storage instance;
     private final HashMap<String, StorageValue> storage;
 
-    public Storage() {
+    private Storage() {
         this.storage = new HashMap<>();
     }
 
-    public void put(String key, DataType value, Optional<Long> ttl){
+    public static Storage getInstance(){
+        if (instance != null) return instance;
+        synchronized (Storage.class){
+            if (instance==null){
+                instance = new Storage();
+            }
+            return instance;
+        }
+    }
+
+    public synchronized void put(String key, DataType value, Optional<Long> ttl){
         StorageValue sValue = new StorageValue(value, ttl);
         storage.put(key, sValue);
     }
@@ -21,9 +32,12 @@ public class Storage {
     public DataType get(String key){
         StorageValue sValue = storage.get(key);
         if (sValue==null) return RedisBulkString.nullString();
+
         if (sValue.isExpired()){
-            storage.remove(key);
-            return RedisBulkString.nullString();
+            synchronized (storage){
+                storage.remove(key);
+                return RedisBulkString.nullString();
+            }
         }
 
         return sValue.get();

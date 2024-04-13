@@ -2,7 +2,6 @@ package RedisServer.resp.commands;
 
 import RedisServer.Settings;
 import RedisServer.resp.Request;
-import RedisServer.resp.Storage;
 import RedisServer.resp.data_types.DataType;
 import RedisServer.resp.data_types.RedisBulkString;
 
@@ -15,7 +14,7 @@ public class Info implements Command {
     }
 
     @Override
-    public byte[] execute(Storage storage) {
+    public byte[] execute() {
         String role = Settings.getRole();
         String masterReplId = Settings.getMasterReplicationId();
         int masterReplOffset = Settings.getMasterReplicationOffset();

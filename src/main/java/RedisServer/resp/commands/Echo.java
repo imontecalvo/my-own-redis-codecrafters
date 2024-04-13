@@ -1,7 +1,6 @@
 package RedisServer.resp.commands;
 
 import RedisServer.resp.Request;
-import RedisServer.resp.Storage;
 import RedisServer.resp.data_types.DataType;
 import RedisServer.resp.data_types.RedisBulkString;
 
@@ -14,7 +13,7 @@ public class Echo implements Command{
     }
 
     @Override
-    public byte[] execute(Storage storage) {
+    public byte[] execute() {
         RedisBulkString response = new RedisBulkString(arg);
         return response.toBytes();
     }

@@ -12,8 +12,8 @@ public class Get implements Command{
         key = ((RedisBulkString)request.getArgs()[0]).getContent();
     }
     @Override
-    public byte[] execute(Storage storage) {
-        DataType response = storage.get(key);
+    public byte[] execute() {
+        DataType response = Storage.getInstance().get(key);
         return response.toBytes();
     }
 }

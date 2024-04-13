@@ -1,5 +1,6 @@
 import RedisServer.Settings;
 import RedisServer.resp.Parser;
+import RedisServer.resp.Storage;
 import RedisServer.resp.commands.Command;
 import RedisServer.resp.commands.Psync;
 import RedisServer.resp.commands.ReplConfFirstMessage;
@@ -18,6 +19,8 @@ public class Main {
     public static void main(String[] args) {
         Settings.set(ArgsParser.parse(args));
         int port = Settings.getPort();
+
+        Storage storage = Storage.getInstance();
 
         // You can use print statements as follows for debugging, they'll be visible when running tests.
         {
@@ -63,15 +66,15 @@ public class Main {
 
                 if (Objects.equals(((RedisString) Objects.requireNonNull(Parser.fromBytes(br))).getContent(), "PONG")){
                     Command command = new ReplConfFirstMessage();
-                    out.write(command.execute(null));
+                    out.write(command.execute());
                     Parser.fromBytes(br);
 
                     Command command2 = new ReplConfSecondMessage();
-                    out.write(command2.execute(null));
+                    out.write(command2.execute());
                     Parser.fromBytes(br);
 
                     Command command3 = new Psync();
-                    out.write(command3.execute(null));
+                    out.write(command3.execute());
                     Parser.fromBytes(br);
                 }
             }

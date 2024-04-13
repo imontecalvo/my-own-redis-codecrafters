@@ -26,8 +26,8 @@ public class Set implements Command{
         }
     }
     @Override
-    public byte[] execute(Storage storage) {
-        storage.put(key, value, ttl);
+    public byte[] execute() {
+        Storage.getInstance().put(key, value, ttl);
         RedisString response = new RedisString("OK");
         return response.toBytes();
     }

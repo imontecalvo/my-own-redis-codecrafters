@@ -20,8 +20,6 @@ public class ClientHandler implements Runnable{
 
     @Override
     public void run() {
-        Storage storage = new Storage();
-
         try{
             BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             OutputStream output = socket.getOutputStream();
@@ -30,7 +28,7 @@ public class ClientHandler implements Runnable{
                 Request request = Request.fromBytes(br);
                 if (request!=null){
                     Command command = CommandFactory.createCommand(request);
-                    output.write(command.execute(storage));
+                    output.write(command.execute());
                 }
             }
         } catch (IOException e) {
