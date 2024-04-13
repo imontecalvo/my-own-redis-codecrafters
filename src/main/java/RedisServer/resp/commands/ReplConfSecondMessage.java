@@ -6,7 +6,7 @@ import RedisServer.resp.data_types.RedisBulkString;
 
 public class ReplConfSecondMessage implements Command{
     @Override
-    public byte[] execute() {
+    public byte[] getResponse() {
         RedisBulkString command = new RedisBulkString("REPLCONF");
         RedisBulkString arg1 = new RedisBulkString("capa");
         RedisBulkString arg2 = new RedisBulkString("npsync2");

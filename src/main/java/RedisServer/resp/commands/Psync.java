@@ -6,7 +6,7 @@ import RedisServer.resp.data_types.RedisBulkString;
 
 public class Psync implements Command{
     @Override
-    public byte[] execute() {
+    public byte[] getResponse() {
         RedisBulkString command = new RedisBulkString("PSYNC");
         RedisBulkString arg1 = new RedisBulkString("?");
         RedisBulkString arg2 = new RedisBulkString("-1");

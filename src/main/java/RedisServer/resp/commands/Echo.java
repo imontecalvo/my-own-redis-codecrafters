@@ -13,7 +13,7 @@ public class Echo implements Command{
     }
 
     @Override
-    public byte[] execute() {
+    public byte[] getResponse() {
         RedisBulkString response = new RedisBulkString(arg);
         return response.toBytes();
     }

@@ -28,7 +28,7 @@ public class ClientHandler implements Runnable{
                 Request request = Request.fromBytes(br);
                 if (request!=null){
                     Command command = CommandFactory.createCommand(request);
-                    output.write(command.execute());
+                    command.respond(output);
                 }
             }
         } catch (IOException e) {

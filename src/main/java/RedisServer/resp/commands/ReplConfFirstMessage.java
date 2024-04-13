@@ -9,7 +9,7 @@ public class ReplConfFirstMessage implements Command{
 
 
     @Override
-    public byte[] execute() {
+    public byte[] getResponse() {
         RedisBulkString command = new RedisBulkString("REPLCONF");
         RedisBulkString arg = new RedisBulkString("listening-port");
         RedisBulkString port = new RedisBulkString(Integer.toString(Settings.getPort()));

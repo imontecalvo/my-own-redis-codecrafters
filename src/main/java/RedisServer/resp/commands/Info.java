@@ -14,7 +14,7 @@ public class Info implements Command {
     }
 
     @Override
-    public byte[] execute() {
+    public byte[] getResponse() {
         String role = Settings.getRole();
         String masterReplId = Settings.getMasterReplicationId();
         int masterReplOffset = Settings.getMasterReplicationOffset();
