@@ -1,6 +1,7 @@
 import RedisServer.Settings;
 import RedisServer.resp.Parser;
 import RedisServer.resp.commands.Command;
+import RedisServer.resp.commands.Psync;
 import RedisServer.resp.commands.ReplConfFirstMessage;
 import RedisServer.resp.commands.ReplConfSecondMessage;
 import RedisServer.resp.data_types.DataType;
@@ -65,6 +66,8 @@ public class Main {
                     out.write(command.execute(null));
                     Command command2 = new ReplConfSecondMessage();
                     out.write(command2.execute(null));
+                    Command command3 = new Psync();
+                    out.write(command3.execute(null));
                 }
             }
         }catch (IOException e){
