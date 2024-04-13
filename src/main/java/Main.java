@@ -3,8 +3,7 @@ import RedisServer.resp.Parser;
 import RedisServer.resp.Storage;
 import RedisServer.resp.commands.Command;
 import RedisServer.resp.commands.Psync;
-import RedisServer.resp.commands.ReplConfFirstMessage;
-import RedisServer.resp.commands.ReplConfSecondMessage;
+import RedisServer.resp.commands.ReplConf;
 import RedisServer.resp.data_types.DataType;
 import RedisServer.resp.data_types.RedisArray;
 import RedisServer.resp.data_types.RedisBulkString;
@@ -65,12 +64,11 @@ public class Main {
                 out.write(msg.toBytes());
 
                 if (Objects.equals(((RedisString) Objects.requireNonNull(Parser.fromBytes(br))).getContent(), "PONG")){
-                    Command command = new ReplConfFirstMessage();
-                    command.respond(out);
+                    ReplConf command = new ReplConf();
+                    command.sendFirstMessage(out);
                     Parser.fromBytes(br);
 
-                    Command command2 = new ReplConfSecondMessage();
-                    command2.respond(out);
+                    command.sendSecondMessage(out);
                     Parser.fromBytes(br);
 
                     Command command3 = new Psync();

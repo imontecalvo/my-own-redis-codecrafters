@@ -11,6 +11,7 @@ public class CommandFactory {
             case "SET" -> new Set(request);
             case "GET" -> new Get(request);
             case "INFO" -> new Info(request);
+            case "REPLCONF" -> new ReplConf();
             default -> null;
         };
     }
