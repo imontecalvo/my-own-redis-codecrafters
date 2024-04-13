@@ -45,15 +45,15 @@ public abstract class Settings {
     }
 
     public static String getMasterReplicationAddress() {
-        if (settings!=null && settings.containsKey("--replicaOf")){
-            return settings.get("--replicaOf")[0];
+        if (settings!=null && settings.containsKey("--replicaof")){
+            return settings.get("--replicaof")[0];
         }
         return null;
     }
 
     public static int getMasterReplicationPort() {
-        if (settings!=null && settings.containsKey("--replicaOf")){
-            return Integer.parseInt(settings.get("--replicaOf")[1]);
+        if (settings!=null && settings.containsKey("--replicaof")){
+            return Integer.parseInt(settings.get("--replicaof")[1]);
         }
         return 0;
     }

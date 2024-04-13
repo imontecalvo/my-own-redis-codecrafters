@@ -27,8 +27,13 @@ public class RedisArray implements DataType{
     }
 
     @Override
-    public byte[] toBytes() {
-        return null;
+    public String encode() {
+        int length = content.length;
+        StringBuilder str = new StringBuilder("*" + length + "\r\n");
+        for (DataType d : content){
+            str.append(d.encode());
+        }
+        return str.toString();
     }
 
     @Override

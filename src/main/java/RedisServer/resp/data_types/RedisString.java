@@ -28,8 +28,8 @@ public class RedisString implements DataType {
     }
 
     @Override
-    public byte[] toBytes() {
-        return String.format("+%s\r\n", this.content).getBytes();
+    public String encode() {
+        return String.format("+%s\r\n", this.content);
     }
 
     @Override

@@ -41,13 +41,13 @@ public class RedisBulkString implements DataType {
     }
 
     @Override
-    public byte[] toBytes() {
+    public String encode() {
         if (content==null){
-            return "$-1\r\n".getBytes();
+            return "$-1\r\n";
         }else if (content.isEmpty()){
-            return "$0\r\n".getBytes();
+            return "$0\r\n";
         }
-        return String.format("$%d\r\n%s\r\n", this.content.length(), this.content).getBytes();
+        return String.format("$%d\r\n%s\r\n", this.content.length(), this.content);
     }
 
     public void print() {
