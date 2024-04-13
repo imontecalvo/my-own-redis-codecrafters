@@ -67,7 +67,7 @@ public class Main {
                     Command command2 = new ReplConfSecondMessage();
                     out.write(command2.execute(null));
                     Command command3 = new Psync();
-                    out.write(command3.execute(null));
+                    out.write("*3\r\n$5\r\nPSYNC\r\n$1\r\n?\r\n$2\r\n-1\r\n".getBytes());
                 }
             }
         }catch (IOException e){
