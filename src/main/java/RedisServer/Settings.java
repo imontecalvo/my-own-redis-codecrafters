@@ -1,5 +1,7 @@
 package RedisServer;
 
+import RedisServer.resp.Parser;
+
 import java.util.HashMap;
 
 public abstract class Settings {
@@ -29,11 +31,30 @@ public abstract class Settings {
         return null;
     }
 
+    public static Boolean isReplica(){
+        return settings.containsKey("--replicaof");
+    }
+
+
     public static String getMasterReplicationId(){
         return MASTER_REPLID;
     }
 
     public static int getMasterReplicationOffset(){
         return MASTER_REPL_OFFSET;
+    }
+
+    public static String getMasterReplicationAddress() {
+        if (settings!=null && settings.containsKey("--replicaOf")){
+            return settings.get("--replicaOf")[0];
+        }
+        return null;
+    }
+
+    public static int getMasterReplicationPort() {
+        if (settings!=null && settings.containsKey("--replicaOf")){
+            return Integer.parseInt(settings.get("--replicaOf")[1]);
+        }
+        return 0;
     }
 }
