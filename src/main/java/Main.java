@@ -66,15 +66,15 @@ public class Main {
 
                 if (Objects.equals(((RedisString) Objects.requireNonNull(Parser.fromBytes(br))).getContent(), "PONG")){
                     Command command = new ReplConfFirstMessage();
-                    out.write(command.execute());
+                    command.respond(out);
                     Parser.fromBytes(br);
 
                     Command command2 = new ReplConfSecondMessage();
-                    out.write(command2.execute());
+                    command2.respond(out);
                     Parser.fromBytes(br);
 
                     Command command3 = new Psync();
-                    out.write(command3.execute());
+                    command3.respond(out);
                     Parser.fromBytes(br);
                 }
             }
