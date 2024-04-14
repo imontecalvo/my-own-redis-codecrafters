@@ -1,5 +1,7 @@
 import RedisServer.Settings;
+import RedisServer.resp.CommandFactory;
 import RedisServer.resp.Parser;
+import RedisServer.resp.Request;
 import RedisServer.resp.Storage;
 import RedisServer.resp.commands.Command;
 import RedisServer.resp.commands.Psync;
@@ -74,6 +76,11 @@ public class Main {
                     Psync command3 = new Psync();
                     command3.send(out);
                     Parser.fromBytes(br);
+
+                    Parser.parse(br);
+
+                    Thread thread = new Thread(()->listeningForReplicationCommands(socket, br));
+                    thread.start();
                 }
             }
         }catch (IOException e){
@@ -81,5 +88,19 @@ public class Main {
             return false;
         }
         return true;
+    }
+
+    public static void listeningForReplicationCommands(Socket socket, BufferedReader br){
+        while (!socket.isClosed()){
+            try{
+                Request request = Request.fromBytes(br);
+                if (request!=null){
+                    Command commandRecv = CommandFactory.createCommand(request);
+                    commandRecv.getResponse();
+                }
+            }catch (IOException e){
+                System.out.println(e);
+            }
+        }
     }
 }
