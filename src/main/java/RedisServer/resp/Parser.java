@@ -12,7 +12,7 @@ public class Parser {
     public static DataType fromBytes(BufferedReader reader) throws IOException {
         DataType data = parse(reader);
         if (data!=null){
-            if (!(data instanceof RedisString)){
+            if (!(data instanceof RedisString) && !(data instanceof RedisBulkString && ((RedisBulkString) data).isNull())) {
                 char[] crlf = new char[2];
                 reader.read(crlf);
             }

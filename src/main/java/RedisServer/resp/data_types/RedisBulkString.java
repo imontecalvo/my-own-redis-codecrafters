@@ -61,4 +61,8 @@ public class RedisBulkString implements DataType {
     public String getContent() {
         return content;
     }
+
+    public boolean isNull() {
+        return content==null;
+    }
 }
