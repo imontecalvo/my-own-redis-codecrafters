@@ -14,8 +14,7 @@ public abstract class Settings {
     private static final int MASTER_REPL_OFFSET = 0;
     private static HashMap<String, String[]> settings;
 
-    //private static List<OutputStream> replicas;
-    private static OutputStream replica;
+    private static List<OutputStream> replicas;
 
     public static void set(HashMap<String, String[]> settings) {
         Settings.settings = settings;
@@ -67,11 +66,10 @@ public abstract class Settings {
     }
 
     public synchronized static void addReplica(OutputStream out) {
-        //replicas.add(out);
-        replica = out;
+        replicas.add(out);
     }
 
-    public static OutputStream getReplicas(){
-        return replica;
+    public static List<OutputStream> getReplicas(){
+        return replicas;
     }
 }
