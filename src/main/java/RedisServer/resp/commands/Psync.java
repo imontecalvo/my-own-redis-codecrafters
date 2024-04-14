@@ -8,8 +8,12 @@ import RedisServer.resp.data_types.RedisString;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.ByteBuffer;
+import java.util.HexFormat;
 
 public class Psync implements Command{
+    private static final String EMPTY_RDB_FILE = "524544495330303131fa0972656469732d76657205372e322e30fa0a72656469732d62697473c040fa056374696d65c26d08bc65fa08757365642d6d656dc2b0c41000fa08616f662d62617365c000fff06e3bfec0ff5aa2";
+
 
     public byte[] getMessage() {
         RedisBulkString command = new RedisBulkString("PSYNC");
@@ -29,5 +33,21 @@ public class Psync implements Command{
         int replOffset = Settings.getMasterReplicationOffset();
 
         return new RedisString("FULLRESYNC "+replId+" "+replOffset).toBytes();
+    }
+
+    public byte[] getFileContentMessage() {
+        byte[] fileContent = HexFormat.of().parseHex(EMPTY_RDB_FILE);
+        byte[] headerMessage = String.format("$%d\r\n",EMPTY_RDB_FILE.length()/2).getBytes();
+
+        ByteBuffer buffer = ByteBuffer.allocate(fileContent.length + headerMessage.length);
+        buffer.put(fileContent);
+        buffer.put(headerMessage);
+        return buffer.array();
+    }
+
+    @Override
+    public void respond(OutputStream out) throws IOException {
+        out.write(getResponse());
+        out.write(getFileContentMessage());
     }
 }
