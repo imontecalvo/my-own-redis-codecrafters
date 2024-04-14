@@ -79,14 +79,23 @@ public class Main {
                 command3.send(out);
                 Parser.fromBytes(br);
 
-                Parser.parse(br);
-
+                readRDBFile(br);
                 return new Thread(() -> listeningForReplicationCommands(socket, br));
             }
         } catch (IOException e) {
             System.out.println("Cannot sync to master server. " + e);
         }
         return null;
+    }
+
+    public static void readRDBFile(BufferedReader reader) throws IOException {
+        char[] symbol = new char[1];
+        reader.read(symbol);
+        if (symbol[0] == '$'){
+            int length = Integer.parseInt(reader.readLine());
+            char[] fileContent = new char[length];
+            reader.read(fileContent);
+        }
     }
 
     public static void listeningForReplicationCommands(Socket socket, BufferedReader br) {
