@@ -18,7 +18,7 @@ public abstract class Settings {
 
     public static void set(HashMap<String, String[]> settings) {
         Settings.settings = settings;
-        //replicas = new ArrayList<>();
+        replicas = new ArrayList<>();
     }
 
 
