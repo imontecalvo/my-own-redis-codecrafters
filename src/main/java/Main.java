@@ -28,8 +28,11 @@ public class Main {
             System.out.println("Logs from your program will appear here!");
         }
 
-        if (!connectToMaster()){
-            return;
+        if (Settings.isReplica()) {
+            Thread thread = connectToMaster();
+            if (thread!=null){
+                thread.start();
+            }
         }
 
         ServerSocket serverSocket = null;
@@ -52,53 +55,49 @@ public class Main {
         }
     }
 
-    public static Boolean connectToMaster(){
-        try{
-            if (Settings.isReplica()){
-                String masterAddress = Settings.getMasterReplicationAddress();
-                int masterPort = Settings.getMasterReplicationPort();
-                Socket socket = new Socket(masterAddress, masterPort);
+    public static Thread connectToMaster() {
+        try {
+            String masterAddress = Settings.getMasterReplicationAddress();
+            int masterPort = Settings.getMasterReplicationPort();
+            Socket socket = new Socket(masterAddress, masterPort);
 
-                BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                OutputStream out = socket.getOutputStream();
+            BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            OutputStream out = socket.getOutputStream();
 
-                RedisArray msg = new RedisArray(new DataType[]{new RedisBulkString("ping")});
-                out.write(msg.toBytes());
+            RedisArray msg = new RedisArray(new DataType[]{new RedisBulkString("ping")});
+            out.write(msg.toBytes());
 
-                if (Objects.equals(((RedisString) Objects.requireNonNull(Parser.fromBytes(br))).getContent(), "PONG")){
-                    ReplConf command = new ReplConf();
-                    command.sendFirstMessage(out);
-                    Parser.fromBytes(br);
+            if (Objects.equals(((RedisString) Objects.requireNonNull(Parser.fromBytes(br))).getContent(), "PONG")) {
+                ReplConf command = new ReplConf();
+                command.sendFirstMessage(out);
+                Parser.fromBytes(br);
 
-                    command.sendSecondMessage(out);
-                    Parser.fromBytes(br);
+                command.sendSecondMessage(out);
+                Parser.fromBytes(br);
 
-                    Psync command3 = new Psync();
-                    command3.send(out);
-                    Parser.fromBytes(br);
+                Psync command3 = new Psync();
+                command3.send(out);
+                Parser.fromBytes(br);
 
-                    Parser.parse(br);
+                Parser.parse(br);
 
-                    Thread thread = new Thread(()->listeningForReplicationCommands(socket, br));
-                    thread.start();
-                }
+                return new Thread(() -> listeningForReplicationCommands(socket, br));
             }
-        }catch (IOException e){
-            System.out.println(e);
-            return false;
+        } catch (IOException e) {
+            System.out.println("Cannot sync to master server. " + e);
         }
-        return true;
+        return null;
     }
 
-    public static void listeningForReplicationCommands(Socket socket, BufferedReader br){
-        while (!socket.isClosed()){
-            try{
+    public static void listeningForReplicationCommands(Socket socket, BufferedReader br) {
+        while (!socket.isClosed()) {
+            try {
                 Request request = Request.fromBytes(br);
-                if (request!=null){
+                if (request != null) {
                     Command commandRecv = CommandFactory.createCommand(request);
                     commandRecv.getResponse();
                 }
-            }catch (IOException e){
+            } catch (IOException e) {
                 System.out.println(e);
             }
         }
