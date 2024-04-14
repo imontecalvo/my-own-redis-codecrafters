@@ -71,8 +71,8 @@ public class Main {
                     command.sendSecondMessage(out);
                     Parser.fromBytes(br);
 
-                    Command command3 = new Psync();
-                    command3.respond(out);
+                    Psync command3 = new Psync();
+                    command3.send(out);
                     Parser.fromBytes(br);
                 }
             }
