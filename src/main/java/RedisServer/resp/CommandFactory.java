@@ -12,6 +12,7 @@ public class CommandFactory {
             case "GET" -> new Get(request);
             case "INFO" -> new Info(request);
             case "REPLCONF" -> new ReplConf();
+            case "PSYNC" -> new Psync();
             default -> null;
         };
     }
