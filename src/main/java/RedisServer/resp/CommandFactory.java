@@ -8,7 +8,7 @@ public class CommandFactory {
         return switch (command) {
             case "PING" -> new Ping();
             case "ECHO" -> new Echo(request);
-            case "SET" -> new Set(request);
+            case "SET" -> Set.fromRequest(request);
             case "GET" -> new Get(request);
             case "INFO" -> new Info(request);
             case "REPLCONF" -> new ReplConf();

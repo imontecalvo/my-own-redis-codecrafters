@@ -2,7 +2,10 @@ package RedisServer;
 
 import RedisServer.resp.Parser;
 
+import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public abstract class Settings {
     private static final int DEF_PORT = 6379;
@@ -11,9 +14,14 @@ public abstract class Settings {
     private static final int MASTER_REPL_OFFSET = 0;
     private static HashMap<String, String[]> settings;
 
+    //private static List<OutputStream> replicas;
+    private static OutputStream replica;
+
     public static void set(HashMap<String, String[]> settings) {
         Settings.settings = settings;
+        //replicas = new ArrayList<>();
     }
+
 
     public static int getPort(){
         if (settings!=null && settings.containsKey("--port")){
@@ -56,5 +64,14 @@ public abstract class Settings {
             return Integer.parseInt(settings.get("--replicaof")[1]);
         }
         return 0;
+    }
+
+    public synchronized static void addReplica(OutputStream out) {
+        //replicas.add(out);
+        replica = out;
+    }
+
+    public static OutputStream getReplicas(){
+        return replica;
     }
 }

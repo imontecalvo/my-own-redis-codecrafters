@@ -49,5 +49,6 @@ public class Psync implements Command{
     public void respond(OutputStream out) throws IOException {
         out.write(getResponse());
         out.write(getFileContentMessage());
+        Settings.addReplica(out);
     }
 }
