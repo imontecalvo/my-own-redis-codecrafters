@@ -36,12 +36,12 @@ public class Psync implements Command{
     }
 
     public byte[] getFileContentMessage() {
-        byte[] fileContent = HexFormat.of().parseHex(EMPTY_RDB_FILE);
         byte[] headerMessage = String.format("$%d\r\n",EMPTY_RDB_FILE.length()/2).getBytes();
+        byte[] fileContent = HexFormat.of().parseHex(EMPTY_RDB_FILE);
 
-        ByteBuffer buffer = ByteBuffer.allocate(fileContent.length + headerMessage.length);
-        buffer.put(fileContent);
+        ByteBuffer buffer = ByteBuffer.allocate(headerMessage.length + fileContent.length);
         buffer.put(headerMessage);
+        buffer.put(fileContent);
         return buffer.array();
     }
 
