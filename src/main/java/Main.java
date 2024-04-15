@@ -109,9 +109,10 @@ public class Main {
                     Command commandRecv = CommandFactory.createCommand(request);
                     if (request.getCommand().equalsIgnoreCase("REPLCONF") &&
                             ((RedisBulkString) request.getArgs()[0]).getContent().equalsIgnoreCase("GETACK")){
-                        commandRecv.respond(out);
-                    }
+                        commandRecv.respond(out); //TODO: Cambia por command.isResponseRequiredByReplica
+                    }else{
                         commandRecv.getResponse();
+                    }
                 }
             } catch (IOException e) {
                 System.out.println(e);
