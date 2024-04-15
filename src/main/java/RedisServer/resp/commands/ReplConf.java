@@ -38,8 +38,7 @@ public class ReplConf implements Command{
         RedisBulkString arg1 = new RedisBulkString("capa");
         RedisBulkString arg2 = new RedisBulkString("npsync2");
 
-        //return new RedisArray(new DataType[]{command, arg1, arg2}).toBytes();
-        return "*3\r\n$8\r\nREPLCONF\r\n$3\r\nACK\r\n$1\r\n0\r\n".getBytes();
+        return new RedisArray(new DataType[]{command, arg1, arg2}).toBytes();
     }
 
     public void sendFirstMessage(OutputStream output) throws IOException {
@@ -57,7 +56,8 @@ public class ReplConf implements Command{
             RedisBulkString type = new RedisBulkString("ACK");
             RedisBulkString arg = new RedisBulkString("0");
 
-            return new RedisArray(new DataType[]{command,type,arg}).toBytes();
+            return "*3\r\n$8\r\nREPLCONF\r\n$3\r\nACK\r\n$1\r\n0\r\n".getBytes();
+            //return new RedisArray(new DataType[]{command,type,arg}).toBytes();
         }
         return new RedisString("OK").toBytes();
     }
