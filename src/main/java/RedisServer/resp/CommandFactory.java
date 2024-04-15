@@ -11,7 +11,7 @@ public class CommandFactory {
             case "SET" -> Set.fromRequest(request);
             case "GET" -> new Get(request);
             case "INFO" -> new Info(request);
-            case "REPLCONF" -> new ReplConf();
+            case "REPLCONF" -> ReplConf.fromRequest(request);
             case "PSYNC" -> new Psync();
             default -> null;
         };

@@ -1,15 +1,29 @@
 package RedisServer.resp.commands;
 
 import RedisServer.Settings;
+import RedisServer.resp.Request;
 import RedisServer.resp.data_types.DataType;
 import RedisServer.resp.data_types.RedisArray;
 import RedisServer.resp.data_types.RedisBulkString;
 import RedisServer.resp.data_types.RedisString;
 
+import javax.xml.crypto.Data;
 import java.io.IOException;
 import java.io.OutputStream;
 
 public class ReplConf implements Command{
+    private DataType[] args;
+
+    public ReplConf() {
+    }
+    
+    public ReplConf(DataType[] args) {
+        this.args = args;
+    }
+
+    public static ReplConf fromRequest(Request request){
+        return new ReplConf(request.getArgs());
+    }
 
     public byte[] getFirstMessage(){
         RedisBulkString command = new RedisBulkString("REPLCONF");
@@ -37,6 +51,13 @@ public class ReplConf implements Command{
 
     @Override
     public byte[] getResponse() {
+        if (((RedisBulkString)args[0]).getContent().equalsIgnoreCase("GETACK")){
+            RedisBulkString command = new RedisBulkString("REPLCONF");
+            RedisBulkString type = new RedisBulkString("ACK");
+            RedisBulkString arg = new RedisBulkString("0");
+
+            return new RedisArray(new DataType[]{command,type,arg}).toBytes();
+        }
         return new RedisString("OK").toBytes();
     }
 }
