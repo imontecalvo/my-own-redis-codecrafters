@@ -5,6 +5,7 @@ import RedisServer.resp.commands.*;
 public class CommandFactory {
     public static Command createCommand(Request request){
         String command = request.getCommand().toUpperCase();
+        System.out.println("Recibi: "+command);
         return switch (command) {
             case "PING" -> new Ping();
             case "ECHO" -> new Echo(request);

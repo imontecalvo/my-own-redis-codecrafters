@@ -12,6 +12,13 @@ public class Propagator {
     public static void propagate(byte[] message) throws IOException {
         for (OutputStream out : Settings.getReplicas()) {
             out.write(message);
+
+            RedisBulkString s1 = new RedisBulkString("REPLCONF");
+            RedisBulkString s2 = new RedisBulkString("GETACK");
+            RedisBulkString s3 = new RedisBulkString("*");
+            
+            out.write("*3\r\n$8\r\nreplconf\r\n$6\r\ngetack\r\n$1\r\n*\r\n".getBytes());
+            //out.write(new RedisArray(new DataType[]{s1,s2,s3}).toBytes());
         }
     }
 }
