@@ -16,7 +16,7 @@ public class ReplConf implements Command{
 
     public ReplConf() {
     }
-    
+
     public ReplConf(DataType[] args) {
         this.args = args;
     }

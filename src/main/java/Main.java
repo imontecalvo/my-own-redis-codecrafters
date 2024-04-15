@@ -11,7 +11,10 @@ import RedisServer.resp.data_types.RedisArray;
 import RedisServer.resp.data_types.RedisBulkString;
 import RedisServer.resp.data_types.RedisString;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Objects;
@@ -30,7 +33,7 @@ public class Main {
 
         if (Settings.isReplica()) {
             Thread thread = connectToMaster();
-            if (thread!=null){
+            if (thread != null) {
                 thread.start();
             }
         }
@@ -80,7 +83,7 @@ public class Main {
                 Parser.fromBytes(br);
 
                 readRDBFile(br);
-                return new Thread(() -> listeningForReplicationCommands(socket, br));
+                return new Thread(() -> listeningForReplicationCommands(socket, out, br));
             }
         } catch (IOException e) {
             System.out.println("Cannot sync to master server. " + e);
@@ -91,20 +94,24 @@ public class Main {
     public static void readRDBFile(BufferedReader reader) throws IOException {
         char[] symbol = new char[1];
         reader.read(symbol);
-        if (symbol[0] == '$'){
+        if (symbol[0] == '$') {
             int length = Integer.parseInt(reader.readLine());
             char[] fileContent = new char[length];
             reader.read(fileContent);
         }
     }
 
-    public static void listeningForReplicationCommands(Socket socket, BufferedReader br) {
+    public static void listeningForReplicationCommands(Socket socket, OutputStream out, BufferedReader br) {
         while (!socket.isClosed()) {
             try {
                 Request request = Request.fromBytes(br);
                 if (request != null) {
                     Command commandRecv = CommandFactory.createCommand(request);
-                    commandRecv.getResponse();
+                    if (request.getCommand().equalsIgnoreCase("REPLCONF") &&
+                            ((RedisBulkString) request.getArgs()[0]).getContent().equalsIgnoreCase("GETACK")){
+                        commandRecv.respond(out);
+                    }
+                        commandRecv.getResponse();
                 }
             } catch (IOException e) {
                 System.out.println(e);
