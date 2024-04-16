@@ -11,12 +11,10 @@ import RedisServer.resp.data_types.RedisArray;
 import RedisServer.resp.data_types.RedisBulkString;
 import RedisServer.resp.data_types.RedisString;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.nio.charset.Charset;
 import java.util.Objects;
 
 public class Main {
@@ -82,7 +80,8 @@ public class Main {
                 command3.send(out);
                 Parser.fromBytes(br);
 
-                readRDBFile(br);
+                DataInputStream dataInputStream = new DataInputStream(socket.getInputStream());
+                readRDBFile(br,dataInputStream);
                 return new Thread(() -> listeningForReplicationCommands(socket, out, br));
             }
         } catch (IOException e) {
@@ -91,13 +90,20 @@ public class Main {
         return null;
     }
 
-    public static void readRDBFile(BufferedReader reader) throws IOException {
+    public static void readRDBFile(BufferedReader reader, DataInputStream inputReader) throws IOException {
         char[] symbol = new char[1];
         reader.read(symbol);
         if (symbol[0] == '$') {
             int length = Integer.parseInt(reader.readLine());
-            char[] fileContent = new char[length];
-            reader.read(fileContent);
+            System.out.println("Long archivo: "+length);
+            byte[] fileContent = new byte[1];
+            //inputReader.read(fileContent);
+
+            System.out.printf("\nArchivo leido:\n%d ; %c\n", fileContent.length, fileContent[fileContent.length-1]);
+            //reader.read(symbol);
+            System.out.printf("Leo: %c\n",symbol[0]);
+            //reader.read(symbol);
+            System.out.printf("Leo: %c\n",symbol[0]);
         }
     }
 
