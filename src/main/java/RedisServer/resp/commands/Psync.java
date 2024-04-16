@@ -49,7 +49,7 @@ public class Psync implements Command{
     public void respond(OutputStream out) throws IOException {
         out.write(getResponse());
         out.write(getFileContentMessage());
-        out.write("*3\r\n$8\r\nreplconf\r\n$6\r\ngetack\r\n$1\r\n*\r\n".getBytes());
+
         Settings.addReplica(out);
     }
 }
