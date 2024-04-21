@@ -30,7 +30,7 @@ public class RedisArray implements DataType{
     @Override
     public String encode() {
         int length = content.length;
-        StringBuilder str = new StringBuilder(PREFIX + length + "\r\n");
+        StringBuilder str = new StringBuilder(String.valueOf(PREFIX) + length + "\r\n");
         for (DataType d : content){
             str.append(d.encode());
         }

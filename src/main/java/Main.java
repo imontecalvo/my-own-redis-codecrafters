@@ -66,12 +66,14 @@ public class Main {
             OutputStream out = socket.getOutputStream();
 
             RedisArray msg = new RedisArray(new DataType[]{new RedisBulkString("ping")});
+            System.out.println("ENVIO PING");
             out.write(msg.toBytes());
 
             if (Objects.equals(((RedisString) Objects.requireNonNull(Parser.fromBytes(br))).getContent(), "PONG")) {
                 ReplConf command = new ReplConf();
                 command.sendFirstMessage(out);
-                Parser.fromBytes(br);
+                System.out.println("ENVIO REPLCONF");
+                Parser.fromBytes(br).print();
 
                 command.sendSecondMessage(out);
                 Parser.fromBytes(br);
