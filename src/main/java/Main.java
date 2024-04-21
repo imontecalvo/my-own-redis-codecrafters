@@ -112,7 +112,6 @@ public class Main {
             try {
                 Request request = Request.fromBytes(br);
                 if (request != null) {
-                    Settings.addOffset(request.getNumberOfBytes());
                     Command commandRecv = CommandFactory.createCommand(request);
                     if (request.getCommand().equalsIgnoreCase("REPLCONF") &&
                             ((RedisBulkString) request.getArgs()[0]).getContent().equalsIgnoreCase("GETACK")){
@@ -120,6 +119,7 @@ public class Main {
                     }else{
                         commandRecv.getResponse();
                     }
+                    Settings.addOffset(request.getNumberOfBytes());
                 }
             } catch (IOException e) {
                 System.out.println(e);
