@@ -48,7 +48,7 @@ public class RedisArray implements DataType{
 
     @Override
     public int getNumberOfBytes() {
-        int bytesCounter = PREFIX.length()+"\r\n".length();
+        int bytesCounter = PREFIX.length()+String.valueOf(content.length).length()+"\r\n".length();
         for (DataType d : content){
             bytesCounter += d.getNumberOfBytes();
         }

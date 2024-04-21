@@ -95,15 +95,6 @@ public class Main {
         reader.read(symbol);
         if (symbol[0] == '$') {
             int length = Integer.parseInt(reader.readLine());
-            System.out.println("Long archivo: "+length);
-            byte[] fileContent = new byte[1];
-            //inputReader.read(fileContent);
-
-            System.out.printf("\nArchivo leido:\n%d ; %c\n", fileContent.length, fileContent[fileContent.length-1]);
-            //reader.read(symbol);
-            System.out.printf("Leo: %c\n",symbol[0]);
-            //reader.read(symbol);
-            System.out.printf("Leo: %c\n",symbol[0]);
         }
     }
 
@@ -120,6 +111,7 @@ public class Main {
                         commandRecv.getResponse();
                     }
                     Settings.addOffset(request.getNumberOfBytes());
+                    System.out.printf("Proceso %d bytes", request.getNumberOfBytes());
                 }
             } catch (IOException e) {
                 System.out.println(e);
