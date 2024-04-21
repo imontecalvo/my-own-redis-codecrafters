@@ -12,7 +12,7 @@ public class RedisInteger implements DataType{
         this.content = content;
     }
 
-    public RedisInteger fromBytes(BufferedReader reader) throws IOException {
+    public static RedisInteger fromBytes(BufferedReader reader) throws IOException {
         String recv = reader.readLine();
         if (recv.charAt(0) == PREFIX){
             int startIndex = 1;

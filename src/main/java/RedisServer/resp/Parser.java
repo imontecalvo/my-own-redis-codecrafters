@@ -1,9 +1,6 @@
 package RedisServer.resp;
 
-import RedisServer.resp.data_types.DataType;
-import RedisServer.resp.data_types.RedisArray;
-import RedisServer.resp.data_types.RedisBulkString;
-import RedisServer.resp.data_types.RedisString;
+import RedisServer.resp.data_types.*;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -29,6 +26,7 @@ public class Parser {
                 case '+' -> RedisString.fromBytes(reader);
                 case '$' -> RedisBulkString.fromBytes(reader);
                 case '*' -> RedisArray.fromBytes(reader);
+                case ':' -> RedisInteger.fromBytes(reader);
                 default -> null;
             };
         }
