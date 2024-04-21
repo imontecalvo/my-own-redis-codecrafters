@@ -110,8 +110,7 @@ public class Main {
                     }else{
                         commandRecv.getResponse();
                     }
-                    Settings.addOffset(request.getNumberOfBytes());
-                    System.out.printf("Proceso %d bytes", request.getNumberOfBytes());
+                    Settings.addOffset(request.getNumberOfBytes());-
                 }
             } catch (IOException e) {
                 System.out.println(e);

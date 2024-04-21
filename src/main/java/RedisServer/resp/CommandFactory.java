@@ -14,7 +14,14 @@ public class CommandFactory {
             case "INFO" -> new Info(request);
             case "REPLCONF" -> ReplConf.fromRequest(request);
             case "PSYNC" -> new Psync();
+            case "WAIT" -> new Wait();
             default -> null;
         };
     }
 }
+/*
+* TODO:
+*  1. Cambiar todo a .fromRequest()
+*  2. Crear constructor en base a parametros
+*  3. Intentar modelar distinto para evitar el switch case
+* */
