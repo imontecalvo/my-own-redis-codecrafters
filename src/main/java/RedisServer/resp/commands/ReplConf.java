@@ -51,12 +51,17 @@ public class ReplConf implements Command{
 
     @Override
     public byte[] getResponse() {
+        //Replica response when master asks for ACK
         if (((RedisBulkString)args[0]).getContent().equalsIgnoreCase("GETACK")){
             RedisBulkString command = new RedisBulkString("REPLCONF");
             RedisBulkString type = new RedisBulkString("ACK");
             RedisBulkString arg = new RedisBulkString(String.valueOf(Settings.getMasterReplicationOffset()));
 
             return new RedisArray(new DataType[]{command,type,arg}).toBytes();
+        }
+        //Master response when replica sends REPLCONF commands
+        if (((RedisBulkString)args[0]).getContent().equalsIgnoreCase("ACK")){
+            Settings.newAck();
         }
         return new RedisString("OK").toBytes();
     }

@@ -11,8 +11,11 @@ public abstract class Settings {
     private static final String MASTER_REPLID = "8371b4fb1155b71f4a04d3e1bc3e18c4a990aeeb";
     private static int masterReplOffset = 0;
     private static HashMap<String, String[]> settings;
-
     private static List<OutputStream> replicas;
+
+    private static int ackCounter = 0;
+
+    public static Object ackLock = new Object();
 
     public static void set(HashMap<String, String[]> settings) {
         Settings.settings = settings;
@@ -75,7 +78,16 @@ public abstract class Settings {
         return replicas.size();
     }
 
-    public static void addOffset(int numberOfBytes) {
+    public synchronized static void addOffset(int numberOfBytes) {
         masterReplOffset+=numberOfBytes;
+    }
+
+    public synchronized static void newAck(){
+        ackCounter--;
+        if (ackCounter==0) ackLock.notify();
+    }
+
+    public synchronized static void setAckCounter(int value){
+        ackCounter=value;
     }
 }
