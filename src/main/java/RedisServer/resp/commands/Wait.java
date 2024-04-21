@@ -24,14 +24,17 @@ public class Wait implements Command{
         int nOfAck = Integer.parseInt(((RedisBulkString) args[0]).getContent());
         int timeout = Integer.parseInt(((RedisBulkString) args[1]).getContent());
 
-        try{
-            synchronized (Settings.ackLock) {
-                Settings.setAckCounter(nOfAck);
-                Settings.ackLock.wait(timeout);
+        if (nOfAck > 0 && timeout > 0){
+            try{
+                synchronized (Settings.ackLock) {
+                    Settings.setAckCounter(nOfAck);
+                    Settings.ackLock.wait(timeout);
+                }
+            }catch (InterruptedException e){
+                System.out.println(e);
             }
-        }catch (InterruptedException e){
-            System.out.println(e);
         }
+
         int nOfReplicas = Settings.getNumberOfReplicas();
         return new RedisInteger(nOfReplicas).toBytes();
     }

@@ -14,14 +14,13 @@ public class RedisInteger implements DataType{
 
     public static RedisInteger fromBytes(BufferedReader reader) throws IOException {
         String recv = reader.readLine();
-        if (recv.charAt(0) == PREFIX){
-            int startIndex = 1;
-            if (recv.charAt(1) == '-' || recv.charAt(1) == '+'){
-                startIndex = 2;
-            }
-            return new RedisInteger(Integer.parseInt(recv.substring(startIndex)));
+
+        int startIndex = 0;
+        if (recv.charAt(startIndex) == '-' || recv.charAt(startIndex) == '+') {
+            startIndex = 1;
         }
-        return null;
+
+        return new RedisInteger(Integer.parseInt(recv.substring(startIndex)));
     }
 
     @Override
