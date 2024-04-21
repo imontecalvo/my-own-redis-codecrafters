@@ -6,6 +6,8 @@ import java.io.IOException;
 public class RedisBulkString implements DataType {
 
     private String content;
+    private static final String PREFIX = "$";
+    private static final String SUFFIX = "\r\n";
 
     public RedisBulkString(String content) {
         this.content = content;
@@ -43,11 +45,11 @@ public class RedisBulkString implements DataType {
     @Override
     public String encode() {
         if (content==null){
-            return "$-1\r\n";
+            return PREFIX+"-1"+SUFFIX;
         }else if (content.isEmpty()){
-            return "$0\r\n";
+            return PREFIX+"0"+SUFFIX;
         }
-        return String.format("$%d\r\n%s\r\n", this.content.length(), this.content);
+        return String.format("%s%d\r\n%s%s", PREFIX, this.content.length(), this.content, SUFFIX);
     }
 
     public void print() {
@@ -64,5 +66,11 @@ public class RedisBulkString implements DataType {
 
     public boolean isNull() {
         return content==null;
+    }
+
+    @Override
+    public int getNumberOfBytes(){
+        if (content==null || content.isEmpty()) return PREFIX.length()+1+SUFFIX.length();
+        return PREFIX.length()+"\r\n".length()+content.length()+SUFFIX.length();
     }
 }

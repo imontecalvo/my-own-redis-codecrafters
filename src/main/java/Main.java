@@ -112,10 +112,10 @@ public class Main {
             try {
                 Request request = Request.fromBytes(br);
                 if (request != null) {
+                    Settings.addOffset(request.getNumberOfBytes());
                     Command commandRecv = CommandFactory.createCommand(request);
                     if (request.getCommand().equalsIgnoreCase("REPLCONF") &&
                             ((RedisBulkString) request.getArgs()[0]).getContent().equalsIgnoreCase("GETACK")){
-                        System.out.println("GETACK!!!");
                         commandRecv.respond(out); //TODO: Cambia por command.isResponseRequiredByReplica
                     }else{
                         commandRecv.getResponse();

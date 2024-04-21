@@ -9,6 +9,7 @@ import RedisServer.resp.Parser;
 public class RedisArray implements DataType{
 
     private final DataType[] content;
+    private static final String PREFIX = "*";
 
     public RedisArray(DataType[] content) {
         this.content = content;
@@ -29,7 +30,7 @@ public class RedisArray implements DataType{
     @Override
     public String encode() {
         int length = content.length;
-        StringBuilder str = new StringBuilder("*" + length + "\r\n");
+        StringBuilder str = new StringBuilder(PREFIX + length + "\r\n");
         for (DataType d : content){
             str.append(d.encode());
         }
@@ -43,6 +44,15 @@ public class RedisArray implements DataType{
             d.print();
         }
         System.out.println("]");
+    }
+
+    @Override
+    public int getNumberOfBytes() {
+        int bytesCounter = PREFIX.length()+"\r\n".length();
+        for (DataType d : content){
+            bytesCounter += d.getNumberOfBytes();
+        }
+        return bytesCounter;
     }
 
     public DataType getElement(int i) {

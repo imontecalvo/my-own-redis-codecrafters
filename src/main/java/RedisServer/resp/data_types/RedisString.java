@@ -6,6 +6,7 @@ import java.io.IOException;
 public class RedisString implements DataType {
 
     private String content;
+    private static final String PREFIX = "+";
 
     public RedisString(String content) {
         this.content = content;
@@ -29,7 +30,7 @@ public class RedisString implements DataType {
 
     @Override
     public String encode() {
-        return String.format("+%s\r\n", this.content);
+        return String.format("%s%s\r\n", PREFIX, this.content);
     }
 
     @Override
@@ -37,7 +38,13 @@ public class RedisString implements DataType {
         System.out.println("Contenido: "+this.content);
     }
 
+    @Override
+    public int getNumberOfBytes() {
+        return PREFIX.length()+content.length();
+    }
+
     public String getContent() {
         return content;
     }
+
 }

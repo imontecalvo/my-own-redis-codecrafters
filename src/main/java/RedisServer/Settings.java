@@ -1,7 +1,5 @@
 package RedisServer;
 
-import RedisServer.resp.Parser;
-
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,7 +9,7 @@ public abstract class Settings {
     private static final int DEF_PORT = 6379;
 
     private static final String MASTER_REPLID = "8371b4fb1155b71f4a04d3e1bc3e18c4a990aeeb";
-    private static final int MASTER_REPL_OFFSET = 0;
+    private static int masterReplOffset = 0;
     private static HashMap<String, String[]> settings;
 
     private static List<OutputStream> replicas;
@@ -48,7 +46,7 @@ public abstract class Settings {
     }
 
     public static int getMasterReplicationOffset(){
-        return MASTER_REPL_OFFSET;
+        return masterReplOffset;
     }
 
     public static String getMasterReplicationAddress() {
@@ -71,5 +69,9 @@ public abstract class Settings {
 
     public static List<OutputStream> getReplicas(){
         return replicas;
+    }
+
+    public static void addOffset(int numberOfBytes) {
+        masterReplOffset+=numberOfBytes;
     }
 }

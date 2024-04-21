@@ -54,10 +54,9 @@ public class ReplConf implements Command{
         if (((RedisBulkString)args[0]).getContent().equalsIgnoreCase("GETACK")){
             RedisBulkString command = new RedisBulkString("REPLCONF");
             RedisBulkString type = new RedisBulkString("ACK");
-            RedisBulkString arg = new RedisBulkString("0");
+            RedisBulkString arg = new RedisBulkString(String.valueOf(Settings.getMasterReplicationOffset()));
 
-            return "*3\r\n$8\r\nREPLCONF\r\n$3\r\nACK\r\n$1\r\n0\r\n".getBytes();
-            //return new RedisArray(new DataType[]{command,type,arg}).toBytes();
+            return new RedisArray(new DataType[]{command,type,arg}).toBytes();
         }
         return new RedisString("OK").toBytes();
     }

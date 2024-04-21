@@ -8,12 +8,14 @@ import java.io.BufferedReader;
 import java.io.IOException;
 
 public class Request {
-    private String command;
-    private DataType[] args;
+    private final String command;
+    private final DataType[] args;
+    private final int numberOfBytes;
 
-    public Request(String command, DataType[] args) {
+    public Request(String command, DataType[] args, int numberOfBytes) {
         this.command = command;
         this.args = args;
+        this.numberOfBytes = numberOfBytes;
     }
 
     public static Request fromBytes(BufferedReader reader) throws IOException {
@@ -23,7 +25,7 @@ public class Request {
         }
 
         String command = ((RedisBulkString) arrayRequest.getElement(0)).getContent();
-        return new Request(command, arrayRequest.slice(1,-1));
+        return new Request(command, arrayRequest.slice(1,-1),recv.getNumberOfBytes());
     }
 
     public String getCommand() {
@@ -32,5 +34,9 @@ public class Request {
 
     public DataType[] getArgs() {
         return args;
+    }
+
+    public int getNumberOfBytes(){
+        return numberOfBytes;
     }
 }

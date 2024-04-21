@@ -9,4 +9,6 @@ public interface DataType {
     public String encode();
 
     public void print();
+
+    public int getNumberOfBytes();
 }
