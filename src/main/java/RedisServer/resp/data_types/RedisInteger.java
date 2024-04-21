@@ -5,7 +5,7 @@ import java.io.IOException;
 
 public class RedisInteger implements DataType{
     private int content;
-    private static final char PREFIX = ':';
+    public static final char PREFIX = ':';
     private static final String SUFFIX = "\r\n";
 
     public RedisInteger(int content){

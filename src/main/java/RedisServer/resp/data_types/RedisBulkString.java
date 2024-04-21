@@ -6,7 +6,7 @@ import java.io.IOException;
 public class RedisBulkString implements DataType {
 
     private String content;
-    private static final String PREFIX = "$";
+    public static final char PREFIX = '$';
     private static final String SUFFIX = "\r\n";
 
     public RedisBulkString(String content) {
@@ -70,8 +70,8 @@ public class RedisBulkString implements DataType {
 
     @Override
     public int getNumberOfBytes(){
-        if (content==null || content.isEmpty()) return PREFIX.length()+1+SUFFIX.length();
+        if (content==null || content.isEmpty()) return 1+1+SUFFIX.length();
         int contentLengthBytes = String.valueOf(content.length()).length();
-        return PREFIX.length()+contentLengthBytes+"\r\n".length()+content.length()+SUFFIX.length();
+        return 1+contentLengthBytes+"\r\n".length()+content.length()+SUFFIX.length();
     }
 }
