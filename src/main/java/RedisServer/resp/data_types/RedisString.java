@@ -38,13 +38,7 @@ public class RedisString implements DataType {
         System.out.println("Contenido: "+this.content);
     }
 
-    @Override
-    public int getNumberOfBytes() {
-        return 1+content.length();
-    }
-
     public String getContent() {
         return content;
     }
-
 }

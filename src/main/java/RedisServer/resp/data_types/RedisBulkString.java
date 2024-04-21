@@ -67,11 +67,4 @@ public class RedisBulkString implements DataType {
     public boolean isNull() {
         return content==null;
     }
-
-    @Override
-    public int getNumberOfBytes(){
-        if (content==null || content.isEmpty()) return 1+1+SUFFIX.length();
-        int contentLengthBytes = String.valueOf(content.length()).length();
-        return 1+contentLengthBytes+"\r\n".length()+content.length()+SUFFIX.length();
-    }
 }

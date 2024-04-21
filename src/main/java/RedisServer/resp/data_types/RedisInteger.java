@@ -34,9 +34,4 @@ public class RedisInteger implements DataType{
     public void print() {
         System.out.printf("Contenido: %d\n", content);
     }
-
-    @Override
-    public int getNumberOfBytes() {
-        return this.encode().length();
-    }
 }

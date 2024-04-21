@@ -12,7 +12,9 @@ public interface DataType {
 
     public void print();
 
-    public int getNumberOfBytes();
+    public default int getNumberOfBytes(){
+        return this.encode().length();
+    }
 
 }
 
