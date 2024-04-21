@@ -25,8 +25,10 @@ public class Wait implements Command{
         int timeout = Integer.parseInt(((RedisBulkString) args[0]).getContent());
 
         try{
-            Settings.setAckCounter(nOfAck);
-            Settings.ackLock.wait(timeout);
+            synchronized (Settings.ackLock) {
+                Settings.setAckCounter(nOfAck);
+                Settings.ackLock.wait(timeout);
+            }
         }catch (InterruptedException e){
             System.out.println(e);
         }
