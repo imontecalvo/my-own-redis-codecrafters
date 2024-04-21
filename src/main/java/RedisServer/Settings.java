@@ -71,6 +71,10 @@ public abstract class Settings {
         return replicas;
     }
 
+    public static int getNumberOfReplicas(){
+        return replicas.size();
+    }
+
     public static void addOffset(int numberOfBytes) {
         masterReplOffset+=numberOfBytes;
     }
