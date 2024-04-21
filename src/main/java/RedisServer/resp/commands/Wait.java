@@ -22,7 +22,7 @@ public class Wait implements Command{
     @Override
     public byte[] getResponse() {
         int nOfAck = Integer.parseInt(((RedisBulkString) args[0]).getContent());
-        int timeout = Integer.parseInt(((RedisBulkString) args[0]).getContent());
+        int timeout = Integer.parseInt(((RedisBulkString) args[1]).getContent());
 
         try{
             synchronized (Settings.ackLock) {
