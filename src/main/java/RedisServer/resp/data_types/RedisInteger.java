@@ -5,14 +5,14 @@ import java.io.IOException;
 
 public class RedisInteger implements DataType{
     private int content;
-    private static final char PREFIX = ':';
+    public static final char PREFIX = ':';
     private static final String SUFFIX = "\r\n";
 
     public RedisInteger(int content){
         this.content = content;
     }
 
-    public RedisInteger fromBytes(BufferedReader reader) throws IOException {
+    public static RedisInteger fromBytes(BufferedReader reader) throws IOException {
         String recv = reader.readLine();
         if (recv.charAt(0) == PREFIX){
             int startIndex = 1;
