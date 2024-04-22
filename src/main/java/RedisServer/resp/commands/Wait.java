@@ -43,8 +43,8 @@ public class Wait implements Command{
             }
         }
 
-        int nOfAcksRecv = nOfAck - Settings.getAckCounter();
         Settings.resetAckCounter();
-        return new RedisInteger(nOfAcksRecv).toBytes();
+        int nOfReplicas = Settings.getNumberOfReplicas();
+        return new RedisInteger(nOfReplicas).toBytes();
     }
 }
