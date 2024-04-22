@@ -21,6 +21,16 @@ public class Wait implements Command{
     }
     @Override
     public byte[] getResponse() {
+        int nOfReplicas = Settings.getNumberOfReplicas();
+        return new RedisInteger(nOfReplicas).toBytes();
+    }
+
+    //TODO: Cambiar diseño para que el envio suceda al tratar cada comando.
+    //Me permite hacer cosas antes y luego del envio
+    @Override
+    public void respond(OutputStream output) throws IOException {
+        output.write(this.getResponse());
+
         int nOfAck = Integer.parseInt(((RedisBulkString) args[0]).getContent());
         int timeout = Integer.parseInt(((RedisBulkString) args[1]).getContent());
 
@@ -34,8 +44,5 @@ public class Wait implements Command{
                 System.out.println(e);
             }
         }
-
-        int nOfReplicas = Settings.getNumberOfReplicas();
-        return new RedisInteger(nOfReplicas).toBytes();
     }
 }
