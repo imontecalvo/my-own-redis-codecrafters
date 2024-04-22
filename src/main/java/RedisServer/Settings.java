@@ -82,12 +82,18 @@ public abstract class Settings {
         masterReplOffset+=numberOfBytes;
     }
 
-    public synchronized static void newAck(){
-        ackCounter--;
-        if (ackCounter==0) ackLock.notify();
+    public static void newAck(){
+        synchronized (ackLock){
+            ackCounter--;
+            if (ackCounter==0) ackLock.notify();
+        }
     }
 
     public synchronized static void setAckCounter(int value){
-        ackCounter=value;
+        ackCounter+=value;
+    }
+
+    public static boolean ackCounterReached() {
+        return ackCounter == 0;
     }
 }
