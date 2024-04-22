@@ -83,6 +83,8 @@ public abstract class Settings {
     }
 
     public static void newAck(){
+        if (ackCounter==0) return;
+
         synchronized (ackLock){
             ackCounter--;
             if (ackCounter==0) ackLock.notify();
@@ -90,10 +92,18 @@ public abstract class Settings {
     }
 
     public synchronized static void setAckCounter(int value){
-        ackCounter+=value;
+        ackCounter=value;
+    }
+
+    public static synchronized void resetAckCounter(){
+        ackCounter=0;
     }
 
     public static boolean ackCounterReached() {
         return ackCounter == 0;
+    }
+
+    public static int getAckCounter() {
+        return ackCounter;
     }
 }

@@ -1,6 +1,7 @@
 package RedisServer.resp.commands;
 
 import RedisServer.Settings;
+import RedisServer.resp.Propagator;
 import RedisServer.resp.Request;
 import RedisServer.resp.data_types.DataType;
 import RedisServer.resp.data_types.RedisBulkString;
@@ -21,20 +22,17 @@ public class Wait implements Command{
     }
     @Override
     public byte[] getResponse() {
-        int nOfReplicas = Settings.getNumberOfReplicas();
-        return new RedisInteger(nOfReplicas).toBytes();
-    }
-
-    //TODO: Cambiar diseño para que el envio suceda al tratar cada comando.
-    //Me permite hacer cosas antes y luego del envio
-    @Override
-    public void respond(OutputStream output) throws IOException {
-        output.write(this.getResponse());
-
         int nOfAck = Integer.parseInt(((RedisBulkString) args[0]).getContent());
         int timeout = Integer.parseInt(((RedisBulkString) args[1]).getContent());
 
         Settings.setAckCounter(nOfAck);
+
+        try{
+            Propagator.askForAcknowledge();
+        }catch(IOException e){
+            System.out.println(e);
+        }
+
         if (!Settings.ackCounterReached() && timeout > 0){
             try{
                 synchronized (Settings.ackLock) {
@@ -44,5 +42,9 @@ public class Wait implements Command{
                 System.out.println(e);
             }
         }
+
+        int nOfAcksRecv = nOfAck - Settings.getAckCounter();
+        Settings.resetAckCounter();
+        return new RedisInteger(nOfAcksRecv).toBytes();
     }
 }

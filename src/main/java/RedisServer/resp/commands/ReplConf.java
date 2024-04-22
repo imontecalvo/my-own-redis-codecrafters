@@ -61,6 +61,7 @@ public class ReplConf implements Command{
         }
         //Master response when replica sends REPLCONF commands
         if (((RedisBulkString)args[0]).getContent().equalsIgnoreCase("ACK")){
+            System.out.println("Recibi ACK");
             Settings.newAck();
         }
         return new RedisString("OK").toBytes();
