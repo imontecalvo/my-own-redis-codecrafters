@@ -44,7 +44,7 @@ public class Wait implements Command{
             }
         }
 
-        int nOfAcksRecv = AckCounter.getCounter();
+        int nOfAcksRecv = AckCounter.getCounter()>0 ? AckCounter.getCounter() : Settings.getNumberOfReplicas();
         AckCounter.reset();
         return new RedisInteger(nOfAcksRecv).toBytes();
     }
