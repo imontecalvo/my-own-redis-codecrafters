@@ -1,5 +1,6 @@
 package RedisServer.resp.commands;
 
+import RedisServer.AckCounter;
 import RedisServer.Settings;
 import RedisServer.resp.Request;
 import RedisServer.resp.data_types.DataType;
@@ -62,7 +63,7 @@ public class ReplConf implements Command{
         //Master response when replica sends REPLCONF commands
         if (((RedisBulkString)args[0]).getContent().equalsIgnoreCase("ACK")){
             System.out.println("Recibi ACK");
-            Settings.newAck();
+            AckCounter.newAck();
         }
         return new RedisString("OK").toBytes();
     }

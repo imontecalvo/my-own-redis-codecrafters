@@ -13,10 +13,6 @@ public abstract class Settings {
     private static HashMap<String, String[]> settings;
     private static List<OutputStream> replicas;
 
-    private static int ackCounter = 0;
-
-    public static Object ackLock = new Object();
-
     public static void set(HashMap<String, String[]> settings) {
         Settings.settings = settings;
         replicas = new ArrayList<>();
@@ -82,28 +78,4 @@ public abstract class Settings {
         masterReplOffset+=numberOfBytes;
     }
 
-    public static void newAck(){
-        if (ackCounter==0) return;
-
-        synchronized (ackLock){
-            ackCounter--;
-            if (ackCounter==0) ackLock.notify();
-        }
-    }
-
-    public synchronized static void setAckCounter(int value){
-        ackCounter=value;
-    }
-
-    public static synchronized void resetAckCounter(){
-        ackCounter=0;
-    }
-
-    public static boolean ackCounterReached() {
-        return ackCounter == 0;
-    }
-
-    public static int getAckCounter() {
-        return ackCounter;
-    }
 }

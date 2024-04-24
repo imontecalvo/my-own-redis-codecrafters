@@ -1,5 +1,6 @@
 package RedisServer.resp.commands;
 
+import RedisServer.AckCounter;
 import RedisServer.Settings;
 import RedisServer.resp.Propagator;
 import RedisServer.resp.Request;
@@ -8,7 +9,6 @@ import RedisServer.resp.data_types.RedisBulkString;
 import RedisServer.resp.data_types.RedisInteger;
 
 import java.io.IOException;
-import java.io.OutputStream;
 
 public class Wait implements Command{
     private DataType[] args;
@@ -22,10 +22,11 @@ public class Wait implements Command{
     }
     @Override
     public byte[] getResponse() {
-        int nOfAck = Integer.parseInt(((RedisBulkString) args[0]).getContent());
+        int nOfAckRequired = Integer.parseInt(((RedisBulkString) args[0]).getContent());
         int timeout = Integer.parseInt(((RedisBulkString) args[1]).getContent());
 
-        Settings.setAckCounter(nOfAck);
+        //Settings.setAckCounter(nOfAckRequired);
+        AckCounter.setLimit(nOfAckRequired);
 
         try{
             Propagator.askForAcknowledge();
@@ -33,18 +34,26 @@ public class Wait implements Command{
             System.out.println(e);
         }
 
-        if (!Settings.ackCounterReached() && timeout > 0){
+        if (!AckCounter.isReached() && timeout > 0) {
             try{
-                synchronized (Settings.ackLock) {
-                    Settings.ackLock.wait(timeout);
+                synchronized (AckCounter.ackLock) {
+                    AckCounter.ackLock.wait(timeout);
                 }
             }catch (InterruptedException e){
                 System.out.println(e);
             }
         }
 
-        Settings.resetAckCounter();
-        int nOfReplicas = Settings.getNumberOfReplicas();
-        return new RedisInteger(nOfReplicas).toBytes();
+        int nOfAcksRecv = AckCounter.isReached() ? AckCounter.getCounter() : Settings.getNumberOfReplicas();
+        AckCounter.reset();
+        return new RedisInteger(nOfAcksRecv).toBytes();
     }
+    /*
+     * TODO:
+     *  Si da timeout -> devolver numero de replicas
+     * Sino, devolver numero de respuestas
+     *
+     * Creo que voy a tener que cambiar el contador y cada vez que me llegue un ACK hacer +1.
+     * Para chequear si ya está, me fijo si el contador es >= a lo pedido
+     * */
 }
