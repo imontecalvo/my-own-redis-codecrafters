@@ -64,6 +64,7 @@ public class ReplConf implements Command{
         if (((RedisBulkString)args[0]).getContent().equalsIgnoreCase("ACK")){
             System.out.println("Recibi ACK");
             AckCounter.newAck();
+            return new byte[0];
         }
         return new RedisString("OK").toBytes();
     }
