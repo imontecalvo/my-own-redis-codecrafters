@@ -22,8 +22,10 @@ public class AckCounter {
         return counter;
     }
 
-    public synchronized  static void newAck() {
-        counter++;
-        if (counter >= limit) ackLock.notify();
+    public static void newAck() {
+        synchronized (ackLock){
+            counter++;
+            if (counter >= limit) ackLock.notify();
+        }
     }
 }
