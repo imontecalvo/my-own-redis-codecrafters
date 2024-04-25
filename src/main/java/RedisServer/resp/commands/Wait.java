@@ -17,15 +17,26 @@ public class Wait implements Command{
         this.args = args;
     }
 
+
     public static Wait fromRequest(Request request){
         return new Wait(request.getArgs());
     }
+
+    /*
+     * Genera la respuesta a un mensaje de tipo WAIT
+     *
+     * Propaga mensaje REPLCONF GET ACK solicitando ACKs a las replicas
+     * Luego se pone en espera hasta recibir la cantidad solicitada de Acks
+     * o hasta que expire el timeout.
+     *
+     * Finalmente, devuelve la cantidad de replicas que respondieron con ACKs.
+     * En caso de no recibir ningun ACK, devuelve la cantidad de replicas
+     * */
     @Override
     public byte[] getResponse() {
         int nOfAckRequired = Integer.parseInt(((RedisBulkString) args[0]).getContent());
         int timeout = Integer.parseInt(((RedisBulkString) args[1]).getContent());
 
-        //Settings.setAckCounter(nOfAckRequired);
         AckCounter.setLimit(nOfAckRequired);
 
         try{
@@ -48,12 +59,4 @@ public class Wait implements Command{
         AckCounter.reset();
         return new RedisInteger(nOfAcksRecv).toBytes();
     }
-    /*
-     * TODO:
-     *  Si da timeout -> devolver numero de replicas
-     * Sino, devolver numero de respuestas
-     *
-     * Creo que voy a tener que cambiar el contador y cada vez que me llegue un ACK hacer +1.
-     * Para chequear si ya está, me fijo si el contador es >= a lo pedido
-     * */
 }

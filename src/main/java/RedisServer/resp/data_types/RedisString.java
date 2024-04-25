@@ -13,19 +13,9 @@ public class RedisString implements DataType {
     }
 
     public static RedisString fromBytes(BufferedReader reader) throws IOException {
-        char[] r = new char[1];
+        String content = reader.readLine();
 
-        StringBuilder content = new StringBuilder();
-
-        while (reader.read(r) > 0 && r[0] != '\r') {
-            content.append(r[0]);
-        }
-        ;
-        if (reader.read(r) == 0 || r[0] != '\n') {
-            throw new IOException();
-        }
-
-        return new RedisString(content.toString());
+        return new RedisString(content);
     }
 
     @Override

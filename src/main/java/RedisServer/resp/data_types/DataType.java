@@ -17,9 +17,3 @@ public interface DataType {
     }
 
 }
-
-/*
-* TODO:
-*  1. Estandarizar parseo -> fromBytes
-*  2. Añadir chequeos al parsear, si falla retornar null o lanzar excepcion.
-* */

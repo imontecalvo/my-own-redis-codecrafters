@@ -18,28 +18,13 @@ public class RedisBulkString implements DataType {
     }
 
     public static RedisBulkString fromBytes(BufferedReader reader) throws IOException {
-        char[] r = new char[1];
-        StringBuilder string = new StringBuilder();
-
-        int length = readStringLength(reader);
+        int length = Integer.parseInt(reader.readLine());
         if (length < 0) return RedisBulkString.nullString();
 
-        for (int i=0; i<length;i++){
-            reader.read(r);
-            string.append(r[0]);
-        }
-        return new RedisBulkString(string.toString());
-    }
+        String content = reader.readLine();
+        if (content.length() != length) throw new IOException();
 
-    private static Integer readStringLength(BufferedReader reader) throws IOException {
-        StringBuilder length = new StringBuilder();
-        char[] r = new char[1];
-
-        while (reader.read(r) > 0 && r[0]!='\r'){
-            length.append(r[0]);
-        }
-        reader.read(r);
-        return Integer.parseInt(length.toString());
+        return new RedisBulkString(content);
     }
 
     @Override
@@ -64,7 +49,4 @@ public class RedisBulkString implements DataType {
         return content;
     }
 
-    public boolean isNull() {
-        return content==null;
-    }
 }
