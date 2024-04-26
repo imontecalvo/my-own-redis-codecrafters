@@ -3,6 +3,8 @@ package RedisServer;
 import RedisServer.resp.Propagator;
 import RedisServer.resp.Storage;
 
+import java.io.IOException;
+
 public abstract class Connection implements Runnable{
     protected Storage storage;
     public RedisSocket socket;
@@ -25,6 +27,10 @@ public abstract class Connection implements Runnable{
     }
 
     public void notifyReplica(){
-        propagator.registerReplica(this);
+        propagator.registerReplicaConnection(this);
+    }
+
+    public void propagate(byte[] msg) throws IOException {
+        propagator.propagate(msg);
     }
 }

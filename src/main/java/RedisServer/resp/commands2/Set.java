@@ -45,7 +45,7 @@ public class Set extends Command{
     public void execute() throws IOException {
         checkConnection();
         connection.getStorage().put(key, value, ttl);
-        //TODO: Propagar
+        connection.propagate(encode());
     }
 
     @Override
@@ -55,7 +55,7 @@ public class Set extends Command{
     }
 
     @Override
-    public void send(RedisSocket socket) throws IOException {
+    public byte[] encode() throws IOException {
         RedisBulkString command = new RedisBulkString(COMMAND);
         RedisBulkString key = new RedisBulkString(this.key);
         RedisArray msg;
@@ -67,7 +67,6 @@ public class Set extends Command{
             RedisBulkString ttl = new RedisBulkString(this.ttl.get().toString());
             msg = new RedisArray(new DataType[]{command, value, key, px, ttl});
         }
-
-        socket.writeBytes(msg.toBytes());
+        return msg.toBytes();
     }
 }

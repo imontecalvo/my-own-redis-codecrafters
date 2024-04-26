@@ -8,27 +8,18 @@ import RedisServer.resp.data_types.RedisBulkString;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 public class Propagator {
     private final Set<Connection> replicas = new HashSet<>();
 
-    public void registerReplica(Connection newReplica){
+    public void registerReplicaConnection(Connection newReplica){
         replicas.add(newReplica);
     }
     public void propagate(byte[] message) throws IOException {
         for (Connection connection : replicas) {
             connection.socket.writeBytes(message);
-        }
-    }
-    public void propagateExcludingSender(byte[] message, Connection sender) throws IOException {
-        for (Connection connection : replicas) {
-            if (connection != sender){
-                connection.socket.writeBytes(message);
-            }
         }
     }
 

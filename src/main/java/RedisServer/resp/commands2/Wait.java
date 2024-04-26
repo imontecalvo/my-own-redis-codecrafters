@@ -38,11 +38,10 @@ public class Wait extends Command{
         AckCounter.reset();
         socket.writeBytes(new RedisInteger(nOfAcksRecv).toBytes());
     }
-
     @Override
-    public void send(RedisSocket socket) throws IOException {
+    public byte[] encode() throws IOException {
         String[] args = new String[]{COMMAND, String.valueOf(ackRequired),String.valueOf(timeout)};
         RedisArray msg = RedisArray.bulkStringArray(args);
-        socket.writeBytes(msg.toBytes());
+        return msg.toBytes();
     }
 }

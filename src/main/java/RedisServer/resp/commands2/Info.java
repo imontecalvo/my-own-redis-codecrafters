@@ -30,8 +30,8 @@ public class Info extends Command{
     }
 
     @Override
-    public void send(RedisSocket socket) throws IOException {
+    public byte[] encode() throws IOException {
         RedisArray msg = RedisArray.bulkStringArray(new String[]{COMMAND, arg});
-        socket.writeBytes(msg.toBytes());
+        return msg.toBytes();
     }
 }

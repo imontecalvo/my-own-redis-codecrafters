@@ -51,9 +51,9 @@ public class ReplConf extends Command{
     }
 
     @Override
-    public void send(RedisSocket socket) throws IOException {
+    public byte[] encode() throws IOException {
         RedisArray msg = RedisArray.bulkStringArray(new String[]{COMMAND, arg1,arg2});
-        socket.writeBytes(msg.toBytes());
+        return msg.toBytes();
     }
 
     public static boolean isValidResponse(DataType response) {
