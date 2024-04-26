@@ -1,54 +1,47 @@
-import RedisServer.resp.Parser;
-import RedisServer.resp.commands.Psync;
-import RedisServer.resp.commands.ReplConf;
-import RedisServer.resp.data_types.DataType;
-import RedisServer.resp.data_types.RedisArray;
-import RedisServer.resp.data_types.RedisBulkString;
-import RedisServer.resp.data_types.RedisString;
-import RedisServer.Settings;
 import RedisServer.RedisSocket;
+import RedisServer.Settings;
+import RedisServer.resp.Parser;
+import RedisServer.resp.commands2.Ping;
+import RedisServer.resp.commands2.Psync;
+import RedisServer.resp.commands2.ReplConf;
+import RedisServer.resp.data_types.RedisString;
+import RedisServer.MasterConnection;
 
-import java.io.*;
-import java.net.Socket;
+import java.io.BufferedReader;
+import java.io.DataInputStream;
+import java.io.IOException;
 import java.util.Objects;
 
 public class RedisReplicaServer extends RedisServer{
     @Override
     public void run(){
-        handleConnectionToMaster();
-        super.run();
+        MasterConnection masterConnection = handleConnectionToMaster();
+        if (masterConnection==null) return;
+        Thread masterConnectionThread = new Thread(masterConnection);
+
+        masterConnectionThread.start(); //Escuchar mensajes de master
+        super.run(); //Escuchar mensaje de clientes
     }
 
-    private void handleConnectionToMaster(){
+    /*
+    * Intenta establecer la conexion con el servidor master y hacer el handshake
+    * En caso de exito, devuelve la conexion
+    * En caso contrario, retorna null
+    * */
+    private MasterConnection handleConnectionToMaster(){
         try {
             String masterAddress = Settings.getMasterReplicationAddress();
             int masterPort = Settings.getMasterReplicationPort();
             RedisSocket socket = new RedisSocket(masterAddress, masterPort);
 
-            RedisArray msg = new RedisArray(new DataType[]{new RedisBulkString("ping")});
-            System.out.println("ENVIO PING");
-            out.write(msg.toBytes());
+            MasterConnection masterConnection = new MasterConnection(socket, storage, propagator);
+            masterConnection.handleHandshake();
 
-            if (Objects.equals(((RedisString) Objects.requireNonNull(Parser.fromBytes(br))).getContent(), "PONG")) {
-                ReplConf command = new ReplConf();
-                command.sendFirstMessage(out);
-                System.out.println("ENVIO REPLCONF");
-                Parser.fromBytes(br).print();
-
-                command.sendSecondMessage(out);
-                Parser.fromBytes(br);
-
-                Psync command3 = new Psync();
-                command3.send(out);
-                Parser.fromBytes(br);
-
-                DataInputStream dataInputStream = new DataInputStream(socket.getInputStream());
-                readRDBFile(br,dataInputStream);
-                return new Thread(() -> listeningForReplicationCommands(socket, out, br));
-            }
+            return masterConnection;
         } catch (IOException e) {
-            System.out.println("Cannot sync to master server. " + e);
+            System.out.println("Cannot sync to master server.\n" + e);
+            return null;
         }
-        return null;
     }
+
 }

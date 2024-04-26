@@ -7,21 +7,10 @@ import java.util.HashMap;
 import java.util.Optional;
 
 public class Storage {
-    private static Storage instance;
     private final HashMap<String, StorageValue> storage;
 
-    private Storage() {
+    public Storage() {
         this.storage = new HashMap<>();
-    }
-
-    public static Storage getInstance(){
-        if (instance != null) return instance;
-        synchronized (Storage.class){
-            if (instance==null){
-                instance = new Storage();
-            }
-            return instance;
-        }
     }
 
     public synchronized void put(String key, DataType value, Optional<Long> ttl){

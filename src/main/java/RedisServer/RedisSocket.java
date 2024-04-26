@@ -50,4 +50,8 @@ public class RedisSocket {
     public void writeBytes(byte[] bytes) throws IOException {
         writer.write(bytes);
     }
+
+    public boolean isClosed() {
+        return socket.isClosed();
+    }
 }
