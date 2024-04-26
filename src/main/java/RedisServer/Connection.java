@@ -33,4 +33,8 @@ public abstract class Connection implements Runnable{
     public void propagate(byte[] msg) throws IOException {
         propagator.propagate(msg);
     }
+
+    public int getNumberOfReplicas() {
+        return propagator.getNumberOfReplicas();
+    }
 }

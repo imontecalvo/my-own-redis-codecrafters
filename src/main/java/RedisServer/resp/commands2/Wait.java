@@ -10,7 +10,7 @@ import RedisServer.resp.data_types.RedisInteger;
 import java.io.IOException;
 
 public class Wait extends Command{
-    public final String COMMAND = "WAIT";
+    public static final String COMMAND = "WAIT";
     private int ackRequired;
     private int timeout;
 
@@ -29,14 +29,19 @@ public class Wait extends Command{
 
     @Override
     public void execute() throws IOException {
+        checkConnection();
+        ReplConf msg = new ReplConf("GETACK","*");
+        connection.propagate(msg.encode());
 
+        AckCounter.getInstance().waitForAck(timeout);
     }
 
     @Override
     public void respond(RedisSocket socket) throws IOException {
-        int nOfAcksRecv = AckCounter.getCounter()>0 ? AckCounter.getCounter() : Settings.getNumberOfReplicas();
-        AckCounter.reset();
-        socket.writeBytes(new RedisInteger(nOfAcksRecv).toBytes());
+        int nOfAcksRecv = AckCounter.getInstance().getCounter();
+        RedisInteger response = new RedisInteger(nOfAcksRecv>0 ? nOfAcksRecv : connection.getNumberOfReplicas());
+        AckCounter.getInstance().reset();
+        socket.writeBytes(response.toBytes());
     }
     @Override
     public byte[] encode() throws IOException {

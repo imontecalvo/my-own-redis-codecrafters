@@ -1,5 +1,6 @@
 package RedisServer.resp.commands2;
 
+import RedisServer.AckCounter;
 import RedisServer.RedisSocket;
 import RedisServer.Settings;
 import RedisServer.resp.data_types.DataType;
@@ -27,8 +28,8 @@ public class ReplConf extends Command{
 
     @Override
     public void execute() {
-        if (arg1.equalsIgnoreCase("GETACK")){
-            //TODO: Logica al recibir ACK
+        if (arg1.equalsIgnoreCase("ACK")){
+            AckCounter.getInstance().newAck();
         }
     }
 

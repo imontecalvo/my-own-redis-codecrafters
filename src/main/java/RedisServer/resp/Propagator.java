@@ -33,4 +33,8 @@ public class Propagator {
             //out.write("*3\r\n$8\r\nreplconf\r\n$6\r\ngetack\r\n$1\r\n*\r\n".getBytes());
         }
     }
+
+    public int getNumberOfReplicas() {
+        return replicas.size();
+    }
 }

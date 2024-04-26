@@ -8,7 +8,7 @@ import RedisServer.resp.data_types.RedisBulkString;
 import java.io.IOException;
 
 public class Echo extends Command{
-    private static String COMMAND = "ECHO";
+    public static final String COMMAND = "ECHO";
     private String arg;
 
     public Echo(String arg) {

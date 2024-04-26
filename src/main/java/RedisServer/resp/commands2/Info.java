@@ -8,11 +8,16 @@ import RedisServer.resp.data_types.RedisBulkString;
 import java.io.IOException;
 
 public class Info extends Command{
-    private static final String COMMAND = "INFO";
+    public static final String COMMAND = "INFO";
     private String arg;
 
     public Info(String arg) {
         this.arg = arg;
+    }
+
+    public Info(RedisArray request) throws IOException {
+        if (request.length()!=2) throw new IOException();
+        this.arg = ((RedisBulkString) request.getElement(1)).getContent();
     }
 
     @Override

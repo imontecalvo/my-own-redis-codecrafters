@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.util.Optional;
 
 public class Set extends Command{
-    public final String COMMAND = "SET";
+    public static final String COMMAND = "SET";
     private final String key;
     private final DataType value;
     private final Optional<Long> ttl;
