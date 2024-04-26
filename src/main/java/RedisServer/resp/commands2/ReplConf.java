@@ -45,7 +45,7 @@ public class ReplConf extends Command{
             socket.writeBytes(response.toBytes());
 
         }else if (arg1.equalsIgnoreCase("GETACK")){
-            int replicationOffset = Settings.getMasterReplicationOffset();
+            int replicationOffset = connection.getBytesReceived();
             RedisArray response = RedisArray.bulkStringArray(new String[]{COMMAND,"ACK",String.valueOf(replicationOffset)});
             socket.writeBytes(response.toBytes());
         }

@@ -29,6 +29,7 @@ public class MasterConnection extends Connection{
                 if (command.isResponseRequiredByReplica()){
                     command.respond();
                 }
+                bytesReceived+=command.encode().length;
             }catch (IOException e){
                 System.out.println(e);
             }

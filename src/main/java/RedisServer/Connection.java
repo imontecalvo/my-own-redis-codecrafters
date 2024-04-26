@@ -9,11 +9,13 @@ public abstract class Connection implements Runnable{
     protected Storage storage;
     public RedisSocket socket;
     protected Propagator propagator;
+    protected int bytesReceived;
 
     public Connection(RedisSocket socket, Storage storage, Propagator propagator) {
         this.socket = socket;
         this.storage = storage;
         this.propagator = propagator;
+        this.bytesReceived = 0;
     }
 
     public abstract void handle();
@@ -36,5 +38,9 @@ public abstract class Connection implements Runnable{
 
     public int getNumberOfReplicas() {
         return propagator.getNumberOfReplicas();
+    }
+
+    public int getBytesReceived() {
+        return bytesReceived;
     }
 }

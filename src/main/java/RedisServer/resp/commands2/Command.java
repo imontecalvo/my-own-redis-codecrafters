@@ -15,7 +15,7 @@ public abstract class Command {
         checkConnection();
         respond(connection.socket);
     }
-    abstract byte[] encode() throws IOException;
+    public abstract byte[] encode() throws IOException;
     public void send(RedisSocket socket) throws IOException{
         socket.writeBytes(encode());
     }
