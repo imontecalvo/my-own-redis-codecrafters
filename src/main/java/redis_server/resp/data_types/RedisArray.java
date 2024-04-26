@@ -1,10 +1,10 @@
-package RedisServer.resp.data_types;
+package redis_server.resp.data_types;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.Arrays;
 
-import RedisServer.resp.Parser;
+import redis_server.RedisSocket;
+import redis_server.resp.Parser;
 
 public class RedisArray implements DataType{
 
@@ -15,13 +15,22 @@ public class RedisArray implements DataType{
         this.content = content;
     }
 
-    public static RedisArray fromBytes(BufferedReader reader) throws IOException {
-        int length = Integer.parseInt(reader.readLine());
+    public static RedisArray fromBytes(RedisSocket socket) throws IOException {
+        int length = Integer.parseInt(socket.readLine());
         DataType[] content = new DataType[length];
         for (int i=0; i<length;i++){
-            content[i] = Parser.fromBytes(reader);
+            content[i] = Parser.fromBytes(socket);
         }
 
+        return new RedisArray(content);
+    }
+
+    public static RedisArray bulkStringArray(String[] args) throws IOException {
+        int length = args.length;
+        DataType[] content = new DataType[length];
+        for (int i=0; i<length;i++){
+            content[i] = new RedisBulkString(args[i]);
+        }
         return new RedisArray(content);
     }
 
@@ -51,5 +60,9 @@ public class RedisArray implements DataType{
     public DataType[] slice(int start, int end) {
         if (end<0) end= content.length;
         return Arrays.copyOfRange(content, start, end);
+    }
+
+    public int length() {
+        return content.length;
     }
 }

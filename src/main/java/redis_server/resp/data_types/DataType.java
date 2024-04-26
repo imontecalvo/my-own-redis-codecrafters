@@ -1,6 +1,4 @@
-package RedisServer.resp.data_types;
-
-import java.io.BufferedReader;
+package redis_server.resp.data_types;
 
 public interface DataType {
 

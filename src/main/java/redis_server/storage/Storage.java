@@ -1,27 +1,16 @@
-package RedisServer.resp;
+package redis_server.storage;
 
-import RedisServer.resp.data_types.DataType;
-import RedisServer.resp.data_types.RedisBulkString;
+import redis_server.resp.data_types.DataType;
+import redis_server.resp.data_types.RedisBulkString;
 
 import java.util.HashMap;
 import java.util.Optional;
 
 public class Storage {
-    private static Storage instance;
     private final HashMap<String, StorageValue> storage;
 
-    private Storage() {
+    public Storage() {
         this.storage = new HashMap<>();
-    }
-
-    public static Storage getInstance(){
-        if (instance != null) return instance;
-        synchronized (Storage.class){
-            if (instance==null){
-                instance = new Storage();
-            }
-            return instance;
-        }
     }
 
     public synchronized void put(String key, DataType value, Optional<Long> ttl){

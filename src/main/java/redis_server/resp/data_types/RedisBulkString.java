@@ -1,6 +1,7 @@
-package RedisServer.resp.data_types;
+package redis_server.resp.data_types;
 
-import java.io.BufferedReader;
+import redis_server.RedisSocket;
+
 import java.io.IOException;
 
 public class RedisBulkString implements DataType {
@@ -17,11 +18,11 @@ public class RedisBulkString implements DataType {
         return new RedisBulkString(null);
     }
 
-    public static RedisBulkString fromBytes(BufferedReader reader) throws IOException {
-        int length = Integer.parseInt(reader.readLine());
+    public static RedisBulkString fromBytes(RedisSocket socket) throws IOException {
+        int length = Integer.parseInt(socket.readLine());
         if (length < 0) return RedisBulkString.nullString();
 
-        String content = reader.readLine();
+        String content = socket.readLine();
         if (content.length() != length) throw new IOException();
 
         return new RedisBulkString(content);

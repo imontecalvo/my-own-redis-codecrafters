@@ -1,4 +1,4 @@
-package RedisServer;
+package redis_server;
 
 import java.io.OutputStream;
 import java.util.ArrayList;
@@ -62,16 +62,8 @@ public abstract class Settings {
         return 0;
     }
 
-    public synchronized static void addReplica(OutputStream out) {
-        replicas.add(out);
-    }
-
     public static List<OutputStream> getReplicas(){
         return replicas;
-    }
-
-    public static int getNumberOfReplicas(){
-        return replicas.size();
     }
 
     public synchronized static void addOffset(int numberOfBytes) {

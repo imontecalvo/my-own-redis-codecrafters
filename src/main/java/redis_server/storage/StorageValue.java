@@ -1,6 +1,6 @@
-package RedisServer.resp;
+package redis_server.storage;
 
-import RedisServer.resp.data_types.DataType;
+import redis_server.resp.data_types.DataType;
 
 import java.util.Date;
 import java.util.Optional;

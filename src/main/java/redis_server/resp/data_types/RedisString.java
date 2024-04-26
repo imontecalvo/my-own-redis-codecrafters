@@ -1,6 +1,7 @@
-package RedisServer.resp.data_types;
+package redis_server.resp.data_types;
 
-import java.io.BufferedReader;
+import redis_server.RedisSocket;
+
 import java.io.IOException;
 
 public class RedisString implements DataType {
@@ -12,8 +13,8 @@ public class RedisString implements DataType {
         this.content = content;
     }
 
-    public static RedisString fromBytes(BufferedReader reader) throws IOException {
-        String content = reader.readLine();
+    public static RedisString fromBytes(RedisSocket socket) throws IOException {
+        String content = socket.readLine();
 
         return new RedisString(content);
     }

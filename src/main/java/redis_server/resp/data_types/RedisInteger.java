@@ -1,6 +1,7 @@
-package RedisServer.resp.data_types;
+package redis_server.resp.data_types;
 
-import java.io.BufferedReader;
+import redis_server.RedisSocket;
+
 import java.io.IOException;
 
 public class RedisInteger implements DataType{
@@ -12,8 +13,8 @@ public class RedisInteger implements DataType{
         this.content = content;
     }
 
-    public static RedisInteger fromBytes(BufferedReader reader) throws IOException {
-        String recv = reader.readLine();
+    public static RedisInteger fromBytes(RedisSocket socket) throws IOException {
+        String recv = socket.readLine();
 
         int startIndex = 0;
         if (recv.charAt(startIndex) == '-' || recv.charAt(startIndex) == '+') {
