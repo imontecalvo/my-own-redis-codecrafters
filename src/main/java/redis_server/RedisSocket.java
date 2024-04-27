@@ -30,7 +30,7 @@ public class RedisSocket {
      * */
     public char[] readChars(int n) throws IOException {
         char[] r = new char[n];
-        reader.read(r);
+        if (reader.read(r)==0) throw new IOException();
         return r;
     }
 
@@ -40,7 +40,8 @@ public class RedisSocket {
      * En caso de error, dispara IOException;
      * */
     public String readLine() throws IOException {
-        return reader.readLine();
+        String string = reader.readLine();
+        return string;
     }
 
     /*
@@ -53,5 +54,11 @@ public class RedisSocket {
 
     public boolean isClosed() {
         return socket.isClosed();
+    }
+
+    public String readString(int length) throws IOException {
+        char[] chars = new char[length];
+        reader.read(chars);
+        return new String(chars);
     }
 }

@@ -22,7 +22,8 @@ public class RedisBulkString implements DataType {
         int length = Integer.parseInt(socket.readLine());
         if (length < 0) return RedisBulkString.nullString();
 
-        String content = socket.readLine();
+        String content = socket.readString(length);
+        socket.readLine();//Leo crlf -> \r\n
         if (content.length() != length) throw new IOException();
 
         return new RedisBulkString(content);

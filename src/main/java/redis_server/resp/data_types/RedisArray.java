@@ -54,7 +54,7 @@ public class RedisArray implements DataType{
     }
 
     public DataType getElement(int i) {
-        return content[0];
+        return content[i];
     }
 
     public DataType[] slice(int start, int end) {
