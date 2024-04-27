@@ -13,6 +13,7 @@ import redis_server.resp.data_types.DataType;
 import redis_server.resp.data_types.RedisArray;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 public class MasterConnection extends Connection {
     public MasterConnection(RedisSocket socket, Storage storage, Propagator propagator) {
@@ -21,11 +22,11 @@ public class MasterConnection extends Connection {
 
     @Override
     public void handle() {
-        while (!socket.isClosed()) {
-            try{
+        try {
+            while (!socket.isClosed()) {
                 DataType request = Parser.fromBytes(socket);
-                if (!(request instanceof RedisArray)) continue;
-
+                if (!(request instanceof RedisArray)) return;
+                //request.print();
                 Command command = CommandFactory.create((RedisArray) request);
                 command.bindConnection(this);
                 command.execute();
@@ -33,9 +34,9 @@ public class MasterConnection extends Connection {
                     command.respond();
                 }
                 bytesReceived+=request.encode().length();
-            }catch (IOException e){
-                System.out.println(e);
             }
+        } catch (IOException e) {
+            System.out.println("IOException: " + e.getMessage() + Arrays.toString(e.getStackTrace()));
         }
     }
 
