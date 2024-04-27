@@ -49,18 +49,22 @@ public class MasterConnection extends Connection {
     * */
     public void handleHandshake() throws IOException {
         new Ping().send(socket);
+        Parser.fromBytes(socket);
         new ReplConf("listening-port", String.valueOf(Settings.getPort())).send(socket);
+        Parser.fromBytes(socket);
         new ReplConf("capa", "psync2").send(socket);
+        Parser.fromBytes(socket);
         new Psync("?", "-1").send(socket);
+        Parser.fromBytes(socket);
 
 
-        if (!Ping.isValidResponse(Parser.fromBytes(socket)) ||
+/*        if (!Ping.isValidResponse(Parser.fromBytes(socket)) ||
                 !ReplConf.isValidResponse(Parser.fromBytes(socket)) ||
                 !ReplConf.isValidResponse(Parser.fromBytes(socket)) ||
                 !Psync.isValidResponse(Parser.fromBytes(socket)))
         {
             throw new IOException();
-        }
+        }*/
         readRDBFile(socket);
     }
 
