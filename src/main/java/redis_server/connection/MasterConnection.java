@@ -52,17 +52,21 @@ public class MasterConnection extends Connection {
         int masterPort = Settings.getMasterReplicationPort();
 
         new Ping().send(socket);
+        Parser.fromBytes(socket).print();
         new ReplConf("listening-port", String.valueOf(masterPort)).send(socket);
+        Parser.fromBytes(socket).print();
         new ReplConf("capa", "psync2").send(socket);
+        Parser.fromBytes(socket).print();
         new Psync("?", "-1").send(socket);
+        Parser.fromBytes(socket).print();
 
-        if (!Ping.isValidResponse(Parser.fromBytes(socket)) ||
+/*        if (!Ping.isValidResponse(Parser.fromBytes(socket)) ||
                 !ReplConf.isValidResponse(Parser.fromBytes(socket)) ||
                 !ReplConf.isValidResponse(Parser.fromBytes(socket)) ||
                 !Psync.isValidResponse(Parser.fromBytes(socket)))
         {
             throw new IOException();
-        }
+        }*/
         readRDBFile(socket);
     }
 
