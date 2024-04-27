@@ -49,11 +49,9 @@ public class MasterConnection extends Connection {
     *   - Recibir Archivo RDB para sincronizar
     * */
     public void handleHandshake() throws IOException {
-        int masterPort = Settings.getMasterReplicationPort();
-
         new Ping().send(socket);
         Parser.fromBytes(socket).print();
-        new ReplConf("listening-port", String.valueOf(masterPort)).send(socket);
+        new ReplConf("listening-port", String.valueOf(Settings.getPort())).send(socket);
         Parser.fromBytes(socket).print();
         new ReplConf("capa", "psync2").send(socket);
         Parser.fromBytes(socket).print();
