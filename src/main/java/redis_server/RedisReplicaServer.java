@@ -8,11 +8,12 @@ import java.util.Arrays;
 public class RedisReplicaServer extends RedisServer{
     @Override
     public void run(){
-        MasterConnection masterConnection = handleConnectionToMaster();
-        if (masterConnection==null) return;
-        Thread masterConnectionThread = new Thread(masterConnection);
+        new Thread(()->{
+            MasterConnection masterConnection = handleConnectionToMaster();
+            if (masterConnection==null) return;
+            masterConnection.handle(); //Escuchar mensajes de master
+        }).start();
 
-        masterConnectionThread.start(); //Escuchar mensajes de master
         super.run(); //Escuchar mensaje de clientes
     }
 
