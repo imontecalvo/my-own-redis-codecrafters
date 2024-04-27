@@ -61,11 +61,11 @@ public class Set extends Command{
         RedisArray msg;
 
         if (ttl.isEmpty()){
-            msg = new RedisArray(new DataType[]{command, value, key});
+            msg = new RedisArray(new DataType[]{command, key, value});
         }else{
             RedisBulkString px = new RedisBulkString("PX");
             RedisBulkString ttl = new RedisBulkString(this.ttl.get().toString());
-            msg = new RedisArray(new DataType[]{command, value, key, px, ttl});
+            msg = new RedisArray(new DataType[]{command, key, value, px, ttl});
         }
         return msg.toBytes();
     }
