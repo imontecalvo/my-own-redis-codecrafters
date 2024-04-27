@@ -3,6 +3,7 @@ package redis_server;
 import redis_server.connection.MasterConnection;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 public class RedisReplicaServer extends RedisServer{
     @Override
@@ -31,7 +32,8 @@ public class RedisReplicaServer extends RedisServer{
 
             return masterConnection;
         } catch (IOException e) {
-            System.out.println("Cannot sync to master server.\n" + e);
+            //System.out.println("Cannot sync to master server.\n" + e);
+            System.out.println("IOException: " + e.getMessage() + Arrays.toString(e.getStackTrace()));
             return null;
         }
     }
