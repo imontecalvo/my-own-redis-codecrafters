@@ -33,8 +33,7 @@ public class RedisReplicaServer extends RedisServer{
 
             return masterConnection;
         } catch (IOException e) {
-            //System.out.println("Cannot sync to master server.\n" + e);
-            System.out.println("IOException: " + e.getMessage() + Arrays.toString(e.getStackTrace()));
+            System.out.println("Cannot sync to master server.\n " + e.getMessage() + Arrays.toString(e.getStackTrace()));
             return null;
         }
     }

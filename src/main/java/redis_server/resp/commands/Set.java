@@ -33,7 +33,6 @@ public class Set extends Command{
 
         //Chequeo de argumento PX (TTL)
         if (request.length()==5){
-            request.print();
             if(((RedisBulkString) request.getElement(3)).getContent().equalsIgnoreCase("PX")){
                 ttl = Optional.of(Long.parseLong(((RedisBulkString) request.getElement(4)).getContent()));
             }

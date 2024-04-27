@@ -32,6 +32,7 @@ public class Wait extends Command{
         ReplConf msg = new ReplConf("GETACK","*");
         connection.propagate(msg.encode());
 
+        AckCounter.getInstance().setLimit(ackRequired);
         AckCounter.getInstance().waitForAck(timeout);
     }
 

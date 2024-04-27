@@ -23,7 +23,6 @@ public class ClientConnection extends Connection {
             while (!socket.isClosed()) {
                 DataType request = Parser.fromBytes(socket);
                 if (!(request instanceof RedisArray)) return;
-                //request.print();
                 Command command = CommandFactory.create((RedisArray) request);
                 command.bindConnection(this);
                 command.execute();

@@ -75,7 +75,7 @@ public class MasterConnection extends Connection {
         char[] symbol = socket.readChars(1);
         if (symbol[0] == '$') {
             int length = Integer.parseInt(socket.readLine());
-            socket.readChars(length);
+            socket.readChars(length-1);
         }
     }
 }
