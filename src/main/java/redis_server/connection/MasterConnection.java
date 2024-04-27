@@ -26,7 +26,6 @@ public class MasterConnection extends Connection {
             while (!socket.isClosed()) {
                 DataType request = Parser.fromBytes(socket);
                 if (!(request instanceof RedisArray)) return;
-                //request.print();
                 Command command = CommandFactory.create((RedisArray) request);
                 command.bindConnection(this);
                 command.execute();
@@ -50,21 +49,18 @@ public class MasterConnection extends Connection {
     * */
     public void handleHandshake() throws IOException {
         new Ping().send(socket);
-        Parser.fromBytes(socket).print();
         new ReplConf("listening-port", String.valueOf(Settings.getPort())).send(socket);
-        Parser.fromBytes(socket).print();
         new ReplConf("capa", "psync2").send(socket);
-        Parser.fromBytes(socket).print();
         new Psync("?", "-1").send(socket);
-        Parser.fromBytes(socket).print();
 
-/*        if (!Ping.isValidResponse(Parser.fromBytes(socket)) ||
+
+        if (!Ping.isValidResponse(Parser.fromBytes(socket)) ||
                 !ReplConf.isValidResponse(Parser.fromBytes(socket)) ||
                 !ReplConf.isValidResponse(Parser.fromBytes(socket)) ||
                 !Psync.isValidResponse(Parser.fromBytes(socket)))
         {
             throw new IOException();
-        }*/
+        }
         readRDBFile(socket);
     }
 
@@ -75,6 +71,7 @@ public class MasterConnection extends Connection {
         char[] symbol = socket.readChars(1);
         if (symbol[0] == '$') {
             int length = Integer.parseInt(socket.readLine());
+            socket.readChars(length);
         }
     }
 }
